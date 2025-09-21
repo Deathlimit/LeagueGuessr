@@ -1,9 +1,11 @@
 package com.example.leagueguessr
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+import android.graphics.drawable.GradientDrawable
+import android.graphics.Color
+import android.view.ViewGroup
 
 class MainActivity : AppCompatActivity() {
     val roleContainerMap = mapOf(
@@ -23,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         "6" to R.id.container_class6   //tank
     )
 
+    var isBorderActive = false
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -68,6 +75,14 @@ class MainActivity : AppCompatActivity() {
 
 
         createImageGrid()
+
+        var startButton: Button
+
+        startButton = findViewById(R.id.startButton)
+        startButton.setOnClickListener {
+            toggleImageBorder()
+        }
+
     }
 
     private fun createImageGrid() {
@@ -97,12 +112,9 @@ class MainActivity : AppCompatActivity() {
         for (field in fields) {
             val resourceName = field.name
             if (resourceName.startsWith("_champion_")) {
-                try {
-                    val resourceId = field.getInt(null)
-                    resources[resourceName] = resourceId
-                } catch (e: Exception) {
-                    //ничего
-                }
+                val resourceId = field.getInt(null)
+                resources[resourceName] = resourceId
+
             }
         }
         return resources
@@ -200,6 +212,24 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener {
                 //попозже
             }
+        }
+    }
+
+    private fun toggleImageBorder() {
+        isBorderActive = !isBorderActive
+        val linearLayout = findViewById<LinearLayout>(R.id.container_class1)
+        val firstChild = (linearLayout.getChildAt(0) as ViewGroup).getChildAt(0)
+
+        if (isBorderActive) {
+            val drawable = GradientDrawable()
+            drawable.shape = GradientDrawable.RECTANGLE
+            drawable.setColor(Color.TRANSPARENT)
+            drawable.setStroke(10, Color.RED)
+            drawable.cornerRadius = 0f
+
+            firstChild.background = drawable
+        } else {
+            firstChild.background = null
         }
     }
 

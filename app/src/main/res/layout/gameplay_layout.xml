@@ -5,260 +5,283 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="721dp"
+        android:layout_weight="3"
+        android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="Баны"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView3"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Баны"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:layout_weight="0"
+                android:visibility="visible"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:layout_weight="0"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:layout_weight="0"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView55"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:layout_weight="0"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:layout_weight="0"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_weight="0"
-            android:visibility="visible"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="center"
+            android:minHeight="200px"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView2"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Пики"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView56"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_weight="0"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="center"
+            android:minHeight="200px"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView"
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Пики"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView57"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:minHeight="200px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_weight="0"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView55"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_weight="0"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Баны"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView15"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_weight="0"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
+            <ImageView
+                android:id="@+id/imageView58"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
 
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+            <ImageView
+                android:id="@+id/imageView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                app:srcCompat="@android:drawable/alert_dark_frame"
+                tools:srcCompat="@android:drawable/alert_dark_frame" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.8"
-        android:gravity="center"
-        android:minHeight="200px"
-        android:orientation="vertical">
+        android:layout_weight="10"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView"
+        <Button
+            android:id="@+id/startButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="Пики"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView56"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.8"
-        android:gravity="center"
-        android:minHeight="200px"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="Пики"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView57"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50px"
-            android:minHeight="200px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="Баны"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView58"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
-        <ImageView
-            android:id="@+id/imageView16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            tools:srcCompat="@android:drawable/alert_dark_frame" />
-
+            android:layout_marginLeft="200px"
+            android:layout_marginRight="200px"
+            android:layout_weight="1"
+            android:text="Start" />
     </LinearLayout>
 
 </LinearLayout>
