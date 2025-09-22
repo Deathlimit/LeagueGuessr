@@ -1,0 +1,171 @@
+package com.example.leagueguessr
+
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+
+class ClassActivity : AppCompatActivity() {
+
+    val roleContainerMap = mapOf(
+        "1" to R.id.container_class1,  //fighter
+        "2" to R.id.container_class2,  //mage
+        "3" to R.id.container_class3,  //support
+        "4" to R.id.container_class4,  //assassin
+        "5" to R.id.container_class5,  //marksman
+        "6" to R.id.container_class6   //tank
+    )
+
+    var isBorderActive = false
+
+    @SuppressLint("MissingInflatedId")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_class) // Новый layout для классов
+
+        createImageGrid()
+
+        val startButton: Button = findViewById(R.id.startButton)
+        startButton.setOnClickListener {
+            toggleImageBorder()
+        }
+    }
+
+    private fun createImageGrid() {
+        val drawableResources = getDrawableChampions()
+        val imagesByRole = mutableMapOf<String, MutableList<Int>>()
+
+        roleContainerMap.keys.forEach { role -> imagesByRole[role] = mutableListOf() }
+
+        drawableResources.forEach { (resourceName, resourceId) ->
+            val roles = extractRolesFromFileName(resourceName)
+            roles.forEach { role ->
+                if (imagesByRole.containsKey(role)) {
+                    imagesByRole[role]?.add(resourceId)
+                }
+            }
+        }
+
+        createImagesInContainers(imagesByRole)
+    }
+
+    private fun getDrawableChampions(): Map<String, Int> {
+        val resources = mutableMapOf<String, Int>()
+        val fields = R.drawable::class.java.fields
+
+        for (field in fields) {
+            val resourceName = field.name
+            if (resourceName.startsWith("_champion_")) {
+                val resourceId = field.getInt(null)
+                resources[resourceName] = resourceId
+            }
+        }
+        return resources
+    }
+
+    private fun extractRolesFromFileName(fileName: String): List<String> {
+        val pattern = "_champion_(\\d+)_.+".toRegex()
+        val result = pattern.find(fileName)
+        val roles = mutableListOf<String>()
+        result?.groupValues?.get(1)?.let { roleDigits ->
+            roleDigits.forEach { digit -> roles.add(digit.toString()) }
+        }
+        return roles
+    }
+
+    private fun createImagesInContainers(imagesByRole: Map<String, List<Int>>) {
+        val screenHeight = resources.displayMetrics.heightPixels
+        val bottomBarHeight = 300
+        val availableHeight = screenHeight - bottomBarHeight
+        val rowsOnScreen = 7
+        val rowHeight = availableHeight / rowsOnScreen
+        val imagesPerRow = 4
+
+        imagesByRole.forEach { (role, imageResources) ->
+            val containerId = roleContainerMap[role]
+            if (containerId != null && imageResources.isNotEmpty()) {
+                val container = findViewById<LinearLayout>(containerId)
+                createImagesForContainer(container, imageResources, rowHeight, imagesPerRow)
+            }
+        }
+    }
+
+    private fun createImagesForContainer(
+        container: LinearLayout,
+        imageResources: List<Int>,
+        rowHeight: Int,
+        imagesPerRow: Int
+    ) {
+        for (i in imageResources.indices step imagesPerRow) {
+            val rowLayout = createRowLayout(rowHeight)
+
+            for (j in 0 until imagesPerRow) {
+                val index = i + j
+                if (index < imageResources.size) {
+                    val imageView = createImageView(imageResources[index], rowHeight)
+                    rowLayout.addView(imageView)
+                } else {
+                    val emptyView = View(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, rowHeight, 1f)
+                    }
+                    rowLayout.addView(emptyView)
+                }
+            }
+            container.addView(rowLayout)
+        }
+    }
+
+    private fun createRowLayout(rowHeight: Int): LinearLayout {
+        return LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                rowHeight
+            )
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 0, 0, 0)
+        }
+    }
+
+    private fun createImageView(imageResource: Int, rowHeight: Int): ImageView {
+        return ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(0, rowHeight, 1f).apply {
+                setMargins(5, 5, 5, 5)
+            }
+            setImageResource(imageResource)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            adjustViewBounds = true
+            setPadding(0, 0, 0, 0)
+            setOnClickListener { /* обработка клика */ }
+        }
+    }
+
+    private fun toggleImageBorder() {
+        isBorderActive = !isBorderActive
+        val linearLayout = findViewById<LinearLayout>(R.id.container_class1)
+
+        if (linearLayout.childCount > 0) {
+            val firstRow = linearLayout.getChildAt(0) as? ViewGroup
+            if (firstRow != null && firstRow.childCount > 0) {
+                val firstChild = firstRow.getChildAt(0)
+
+                if (isBorderActive) {
+                    val drawable = GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
+                        setColor(Color.TRANSPARENT)
+                        setStroke(10, Color.RED)
+                        cornerRadius = 0f
+                    }
+                    firstChild.background = drawable
+                } else {
+                    firstChild.background = null
+                }
+            }
+        }
+    }
+}

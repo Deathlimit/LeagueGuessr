@@ -11,15 +11,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LeagueGuessr">
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ClassActivity"
+            android:exported="false"
+            android:label="Classes"
+            android:theme="@style/Theme.LeagueGuessr"/>
+
+        <activity
+            android:name=".GameplayActivity"
+            android:exported="false"
+            android:label="Gameplay"
+            android:theme="@style/Theme.LeagueGuessr"/>
+
     </application>
 
 </manifest>
