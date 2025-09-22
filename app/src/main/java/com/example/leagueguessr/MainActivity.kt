@@ -224,11 +224,13 @@ class MainActivity : AppCompatActivity() {
             val drawable = GradientDrawable()
             drawable.shape = GradientDrawable.RECTANGLE
             drawable.setColor(Color.TRANSPARENT)
-            drawable.setStroke(10, Color.RED)
-            drawable.cornerRadius = 0f
+            drawable.setStroke(50, Color.RED)
+            drawable.cornerRadius = 1f
 
+            firstChild.setPadding(5, 10, 5, 10)
             firstChild.background = drawable
         } else {
+            firstChild.setPadding(0, 0, 0, 0)
             firstChild.background = null
         }
     }
