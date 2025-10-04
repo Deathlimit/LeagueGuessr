@@ -3,19 +3,18 @@ package com.example.leagueguessr
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profile)
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        val startButton: Button = findViewById(R.id.startButton)
+
 
         // Устанавливаем выбранный пункт для gameplay
         bottomNavigation.selectedItemId = R.id.navigation_gameplay
@@ -30,27 +29,18 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_gameplay -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.navigation_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
                     true
                 }
                 else -> false
             }
         }
 
-        startButton.setOnClickListener {
-            // Здесь будет логика начала игры
-            // Можно добавить функционал для заполнения ImageView чемпионами
-        }
-
-        // Инициализация ImageView для дальнейшей работы
-        initGameplayViews()
     }
 
-    private fun initGameplayViews() {
-
-    }
 }
