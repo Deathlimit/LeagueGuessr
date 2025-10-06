@@ -1,0 +1,40 @@
+package com.example.leagueguessr
+
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
+class ProfileActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_profile)
+
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigation.selectedItemId = R.id.navigation_profile
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_classes -> {
+                    val intent = Intent(this, ChampionsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_gameplay -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_profile -> {
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+    }
+
+}
