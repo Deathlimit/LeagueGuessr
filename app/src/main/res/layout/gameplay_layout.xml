@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Баны"
+                android:text="@string/bans"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Пики"
+                android:text="@string/picks"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Пики"
+                android:text="@string/picks"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -234,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Баны"
+                android:text="@string/bans"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 

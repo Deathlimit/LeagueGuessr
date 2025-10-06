@@ -11,6 +11,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
+import java.util.Locale
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setAppLanguage()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -131,4 +134,36 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         GameState.saveState(this)
     }
+
+   fun changeLanguage(languageCode: String) {
+        val prefs = getSharedPreferences("AppSettings", MODE_PRIVATE)
+        prefs.edit().putString("language", languageCode).apply()
+
+        recreate()
+    }
+
+    fun setAppLanguage() {
+        val prefs = getSharedPreferences("AppSettings", MODE_PRIVATE)
+        val languageCode = prefs.getString("language", "ru") ?: "ru"
+
+        val locale = when (languageCode) {
+            "en" -> Locale.ENGLISH
+            "ru" -> Locale("ru", "RU")
+            else -> Locale.getDefault()
+        }
+        Locale.setDefault(locale)
+
+        resources.configuration.setLocale(locale)
+
+        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
+    }
+
+    fun setRussian(view: View) {
+        changeLanguage("ru")
+    }
+
+    fun setEnglish(view: View) {
+        changeLanguage("en")
+    }
+
 }

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">LeagueGuessr</string>
+    <string name="app_name">League Guessr</string>
+    <string name="picks">Пики</string>
+    <string name="bans">Баны</string>
+    <string name="start">Начать</string>
+    <string name="end">Закончить</string>
 </resources>
