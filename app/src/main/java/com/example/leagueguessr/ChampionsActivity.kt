@@ -11,7 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ChampionsActivity : AppCompatActivity() {
 
-    private val roleContainerMap = mapOf(
+     val roleContainerMap = mapOf(
         "1" to R.id.container_class1,
         "2" to R.id.container_class2,
         "3" to R.id.container_class3,
@@ -26,17 +26,13 @@ class ChampionsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_champions)
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-
-        // Устанавливаем выбранный пункт для classes
         bottomNavigation.selectedItemId = R.id.navigation_classes
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_gameplay -> {
-
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.navigation_classes -> {
@@ -54,46 +50,38 @@ class ChampionsActivity : AppCompatActivity() {
         createImageGrid()
     }
 
-    private fun createImageGrid() {
-        try {
-            val drawableResources = getDrawableChampions()
-            val imagesByRole = mutableMapOf<String, MutableList<Int>>()
+     fun createImageGrid() {
+        val drawableResources = getDrawableChampions()
+        val imagesByRole = mutableMapOf<String, MutableList<Int>>()
 
-            roleContainerMap.keys.forEach { role -> imagesByRole[role] = mutableListOf() }
+        roleContainerMap.keys.forEach { role -> imagesByRole[role] = mutableListOf() }
 
-            drawableResources.forEach { (resourceName, resourceId) ->
-                val roles = extractRolesFromFileName(resourceName)
-                roles.forEach { role ->
-                    if (imagesByRole.containsKey(role)) {
-                        imagesByRole[role]?.add(resourceId)
-                    }
+        drawableResources.forEach { (resourceName, resourceId) ->
+            val roles = extractRolesFromFileName(resourceName)
+            roles.forEach { role ->
+                if (imagesByRole.containsKey(role)) {
+                    imagesByRole[role]?.add(resourceId)
                 }
             }
-
-            createImagesInContainers(imagesByRole)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+
+        createImagesInContainers(imagesByRole)
     }
 
-    private fun getDrawableChampions(): Map<String, Int> {
+     fun getDrawableChampions(): Map<String, Int> {
         val resources = mutableMapOf<String, Int>()
-        try {
-            val fields = R.drawable::class.java.fields
-            for (field in fields) {
-                val resourceName = field.name
-                if (resourceName.startsWith("_champion_")) {
-                    val resourceId = field.getInt(null)
-                    resources[resourceName] = resourceId
-                }
+        val fields = R.drawable::class.java.fields
+        for (field in fields) {
+            val resourceName = field.name
+            if (resourceName.startsWith("_champion_")) {
+                val resourceId = field.getInt(null)
+                resources[resourceName] = resourceId
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
         return resources
     }
 
-    private fun extractRolesFromFileName(fileName: String): List<String> {
+     fun extractRolesFromFileName(fileName: String): List<String> {
         val pattern = "_champion_(\\d+)_.+".toRegex()
         val result = pattern.find(fileName)
 
@@ -106,26 +94,22 @@ class ChampionsActivity : AppCompatActivity() {
         return roles
     }
 
-    private fun createImagesInContainers(imagesByRole: Map<String, List<Int>>) {
-        try {
-            val screenHeight = resources.displayMetrics.heightPixels
-            val availableHeight = screenHeight - 300 // минус высота навигации
-            val rowHeight = availableHeight / 7
-            val imagesPerRow = 4
+     fun createImagesInContainers(imagesByRole: Map<String, List<Int>>) {
+        val screenHeight = resources.displayMetrics.heightPixels
+        val availableHeight = screenHeight - 300 // минус высота навигации
+        val rowHeight = availableHeight / 7
+        val imagesPerRow = 4
 
-            imagesByRole.forEach { (role, imageResources) ->
-                val containerId = roleContainerMap[role]
-                if (containerId != null && imageResources.isNotEmpty()) {
-                    val container = findViewById<LinearLayout>(containerId)
-                    createImagesForContainer(container, imageResources, rowHeight, imagesPerRow)
-                }
+        imagesByRole.forEach { (role, imageResources) ->
+            val containerId = roleContainerMap[role]
+            if (containerId != null && imageResources.isNotEmpty()) {
+                val container = findViewById<LinearLayout>(containerId)
+                createImagesForContainer(container, imageResources, rowHeight, imagesPerRow)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
-    private fun createImagesForContainer(
+     fun createImagesForContainer(
         container: LinearLayout,
         imageResources: List<Int>,
         rowHeight: Int,
@@ -155,7 +139,7 @@ class ChampionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun createRowLayout(rowHeight: Int): LinearLayout {
+     fun createRowLayout(rowHeight: Int): LinearLayout {
         return LinearLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -165,7 +149,7 @@ class ChampionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun createImageView(imageResource: Int, rowHeight: Int): ImageView {
+     fun createImageView(imageResource: Int, rowHeight: Int): ImageView {
         return ImageView(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 0,
@@ -177,6 +161,19 @@ class ChampionsActivity : AppCompatActivity() {
             setImageResource(imageResource)
             scaleType = ImageView.ScaleType.CENTER_CROP
             adjustViewBounds = true
+
+
+            setOnClickListener {
+                if (GameState.isGameStarted) {
+                    GameState.selectChampion(imageResource)
+                    GameState.saveState(this@ChampionsActivity)
+
+                    //обратно в геймлей
+                    val intent = Intent(this@ChampionsActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+
+            }
         }
     }
 }
