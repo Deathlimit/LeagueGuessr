@@ -6,12 +6,10 @@ import android.content.SharedPreferences
 object GameState {
      const val PREFS_NAME = "GameStatePrefs"
 
-
      const val KEY_SELECTED_PICK_INDEX = "selected_pick_index"
      const val KEY_GAME_STARTED = "game_started"
      const val KEY_SELECTED_CHAMPION_ID = "selected_champion_id"
      const val KEY_IS_CHAMPION_SELECTED = "is_champion_selected"
-
 
     var selectedPickIndex: Int = -1
     var isGameStarted: Boolean = false
@@ -76,9 +74,3 @@ object GameState {
     fun hasSelectedChampion(): Boolean = isChampionSelected && selectedChampionId != -1
 }
 
-data class GameStateData(
-    val selectedPickIndex: Int,
-    val isGameStarted: Boolean,
-    val selectedChampionId: Int,
-    val isChampionSelected: Boolean
-)
