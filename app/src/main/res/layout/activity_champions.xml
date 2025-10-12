@@ -19,6 +19,7 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <!-- Fighter -->
             <EditText
                 android:id="@+id/editText_class1"
                 android:layout_width="match_parent"
@@ -29,12 +30,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class1"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Mage -->
             <EditText
                 android:id="@+id/editText_class2"
                 android:layout_width="match_parent"
@@ -45,12 +47,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class2"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Support -->
             <EditText
                 android:id="@+id/editText_class3"
                 android:layout_width="match_parent"
@@ -61,12 +64,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class3"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Assassin -->
             <EditText
                 android:id="@+id/editText_class4"
                 android:layout_width="match_parent"
@@ -77,12 +81,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class4"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Marksman -->
             <EditText
                 android:id="@+id/editText_class5"
                 android:layout_width="match_parent"
@@ -93,12 +98,13 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class5"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Tank -->
             <EditText
                 android:id="@+id/editText_class6"
                 android:layout_width="match_parent"
@@ -109,11 +115,11 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <LinearLayout
-                android:id="@+id/container_class6"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_class6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
     </ScrollView>
