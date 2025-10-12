@@ -66,7 +66,7 @@ class ChampionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView(recyclerViewId: Int, champions: List<Champion>) {
+    private fun setupRecyclerView(recyclerViewId: Int, champions: List<Data_champion>) {
         val recyclerView: RecyclerView = findViewById(recyclerViewId)
 
         val adapter = ChampionsAdapter(champions) { champion ->
@@ -84,8 +84,8 @@ class ChampionsActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
     }
 
-    private fun getChampionsByRole(): Map<String, List<Champion>> {
-        val championsByRole = mutableMapOf<String, MutableList<Champion>>()
+    private fun getChampionsByRole(): Map<String, List<Data_champion>> {
+        val championsByRole = mutableMapOf<String, MutableList<Data_champion>>()
         roleRecyclerViewMap.keys.forEach { role ->
             championsByRole[role] = mutableListOf()
         }
@@ -97,7 +97,7 @@ class ChampionsActivity : AppCompatActivity() {
 
             roles.forEach { role ->
                 if (championsByRole.containsKey(role)) {
-                    val champion = Champion(
+                    val champion = Data_champion(
                         id = resourceId,
                         name = name,
                         imageResId = resourceId,

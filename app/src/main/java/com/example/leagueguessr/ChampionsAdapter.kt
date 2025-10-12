@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ChampionsAdapter(
-    private val champions: List<Champion>,
-    private val onChampionClick: (Champion) -> Unit
+     val champions: List<Data_champion>,
+     val onChampionClick: (Data_champion) -> Unit
 ) : RecyclerView.Adapter<ChampionsAdapter.ChampionViewHolder>() {
 
 
