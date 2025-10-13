@@ -10,7 +10,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ChampionsActivity : AppCompatActivity() {
 
-    // Маппинг ролей на RecyclerView
     private val roleRecyclerViewMap = mapOf(
         "1" to R.id.rv_class1, // Fighter
         "2" to R.id.rv_class2, // Mage
@@ -54,10 +53,8 @@ class ChampionsActivity : AppCompatActivity() {
     }
 
     private fun setupChampionsRecyclerViews() {
-        // Получаем чемпионов сгруппированных по ролям
         val championsByRole = getChampionsByRole()
 
-        // Настраиваем RecyclerView для каждой роли
         championsByRole.forEach { (role, champions) ->
             val recyclerViewId = roleRecyclerViewMap[role]
             if (recyclerViewId != null && champions.isNotEmpty()) {
