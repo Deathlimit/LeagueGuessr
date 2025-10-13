@@ -37,6 +37,7 @@ class ChampionsActivity : AppCompatActivity() {
                 R.id.navigation_gameplay -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true
                 }
                 R.id.navigation_classes -> {
@@ -45,6 +46,7 @@ class ChampionsActivity : AppCompatActivity() {
                 R.id.navigation_profile -> {
                     val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true
                 }
                 else -> false
