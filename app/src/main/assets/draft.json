@@ -1,0 +1,22 @@
+{
+    "bans": [
+      {"type": "ban", "team": 1, "order": 1, "champion": "Yasuo", "position": 0},
+      {"type": "ban", "team": 2, "order": 2, "champion": "Zed", "position": 0},
+      {"type": "ban", "team": 1, "order": 3, "champion": "Master Yi", "position": 1},
+      {"type": "ban", "team": 2, "order": 4, "champion": "Vayne", "position": 1},
+      {"type": "ban", "team": 1, "order": 5, "champion": "Darius", "position": 2},
+      {"type": "ban", "team": 2, "order": 6, "champion": "Akali", "position": 2}
+    ],
+    "picks": [
+      {"type": "pick", "team": 1, "order": 7, "champion": "Jax", "position": 0},
+      {"type": "pick", "team": 2, "order": 8, "champion": "Garen", "position": 0},
+      {"type": "pick", "team": 2, "order": 9, "champion": "Lux", "position": 1},
+      {"type": "pick", "team": 1, "order": 10, "champion": "Ahri", "position": 1},
+      {"type": "pick", "team": 1, "order": 11, "champion": "Thresh", "position": 2},
+      {"type": "pick", "team": 2, "order": 12, "champion": "Leona", "position": 2},
+      {"type": "pick", "team": 2, "order": 13, "champion": "Caitlyn", "position": 3},
+      {"type": "pick", "team": 1, "order": 14, "champion": null, "position": 3},
+      {"type": "pick", "team": 1, "order": 15, "champion": "Malphite", "position": 4},
+      {"type": "pick", "team": 2, "order": 16, "champion": "Amumu", "position": 4}
+    ]
+  }

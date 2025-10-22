@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class ChampionsAdapter(
+class Adapter_Champions(
     val champions: List<Data_champion>,
     val onChampionClick: (Data_champion) -> Unit
-) : RecyclerView.Adapter<ChampionsAdapter.ChampionViewHolder>() {
+) : RecyclerView.Adapter<Adapter_Champions.ChampionViewHolder>() {
 
     class ChampionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.ivChampion)

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".ProfileActivity">
+    tools:context=".Activity_Profile">
 
     <ScrollView
         android:layout_width="match_parent"

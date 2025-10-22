@@ -14,6 +14,7 @@
         android:layout_weight="3"
         android:orientation="horizontal">
 
+        <!-- Левая колонка с банами -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,7 +32,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/BanLeft1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -41,7 +42,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/BanLeft2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -50,7 +51,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/BanLeft3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -59,7 +60,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView55"
+                android:id="@+id/BanLeft4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -68,16 +69,16 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView15"
+                android:id="@+id/BanLeft5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="0"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
-
         </LinearLayout>
 
+        <!-- Левая колонка с пиками -->
         <LinearLayout
             android:id="@+id/PicksLeft"
             android:layout_width="match_parent"
@@ -146,10 +147,9 @@
                 android:minHeight="200px"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
-
-
         </LinearLayout>
 
+        <!-- Правая колонка с пиками -->
         <LinearLayout
             android:id="@+id/PicksRight"
             android:layout_width="match_parent"
@@ -218,9 +218,9 @@
                 android:minHeight="200px"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
-
         </LinearLayout>
 
+        <!-- Правая колонка с банами -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -239,7 +239,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView58"
+                android:id="@+id/BanRight1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -247,7 +247,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView12"
+                android:id="@+id/BanRight2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -255,7 +255,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView13"
+                android:id="@+id/BanRight3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -263,7 +263,7 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView14"
+                android:id="@+id/BanRight4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
@@ -271,31 +271,77 @@
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
             <ImageView
-                android:id="@+id/imageView16"
+                android:id="@+id/BanRight5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
-
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Кнопка Start -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="10"
+        android:layout_weight="8"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/startButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="200px"
             android:layout_marginRight="200px"
             android:layout_weight="1"
             android:text="Start" />
     </LinearLayout>
+
+    <!-- Кнопки смены языка -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/button_russian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RU"
+            android:backgroundTint="@color/button_background"
+            android:textColor="@color/button_text"
+            android:layout_margin="8dp" />
+
+        <Button
+            android:id="@+id/button_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EN"
+            android:backgroundTint="@color/button_background"
+            android:textColor="@color/button_text"
+            android:layout_margin="8dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/loadDraftButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Load Draft"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/draftInfoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="No draft loaded"
+        android:textSize="16sp" />
 
 </LinearLayout>

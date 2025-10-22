@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class HistoryAdapter(
+class Adapter_History(
     val historyItems: List<Data_history>
-) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+) : RecyclerView.Adapter<Adapter_History.HistoryViewHolder>() {
 
     class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val championImage: ImageView = itemView.findViewById(R.id.ivHistoryChampion)

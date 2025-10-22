@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ChampionsActivity">
+    tools:context=".Activity_Champions">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -13,7 +13,6 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -30,8 +29,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class1"
+            <FrameLayout
+                android:id="@+id/container_class1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -47,8 +46,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class2"
+            <FrameLayout
+                android:id="@+id/container_class2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -64,8 +63,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class3"
+            <FrameLayout
+                android:id="@+id/container_class3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -81,8 +80,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class4"
+            <FrameLayout
+                android:id="@+id/container_class4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -98,8 +97,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class5"
+            <FrameLayout
+                android:id="@+id/container_class5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -115,8 +114,8 @@
                 android:background="@android:color/transparent"
                 android:focusable="false" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_class6"
+            <FrameLayout
+                android:id="@+id/container_class6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />

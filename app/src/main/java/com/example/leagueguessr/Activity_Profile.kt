@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ProfileActivity : AppCompatActivity() {
+class Activity_Profile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +20,14 @@ class ProfileActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_classes -> {
-                    val intent = Intent(this, ChampionsActivity::class.java)
+                    val intent = Intent(this, Activity_Champions::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true
                 }
                 R.id.navigation_gameplay -> {
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, Activity_Gameplay::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -47,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         val historyRecyclerView: RecyclerView = findViewById(R.id.historyRecyclerView)
         val historyItems = generateTestHistoryData()
 
-        val adapter = HistoryAdapter(historyItems)
+        val adapter = Adapter_History(historyItems)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = adapter
     }
