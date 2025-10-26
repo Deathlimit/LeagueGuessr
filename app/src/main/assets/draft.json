@@ -5,7 +5,8 @@
       {"type": "ban", "team": 1, "order": 3, "champion": "Master Yi", "position": 1},
       {"type": "ban", "team": 2, "order": 4, "champion": "Vayne", "position": 1},
       {"type": "ban", "team": 1, "order": 5, "champion": "Darius", "position": 2},
-      {"type": "ban", "team": 2, "order": 6, "champion": "Akali", "position": 2}
+      {"type": "ban", "team": 2, "order": 6, "champion": "Akali", "position": 2},
+      {"type": "ban", "team": 1, "order": 7, "champion": "SETT", "position": 3}
     ],
     "picks": [
       {"type": "pick", "team": 1, "order": 7, "champion": "Jax", "position": 0},

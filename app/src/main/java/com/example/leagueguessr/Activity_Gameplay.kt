@@ -8,6 +8,8 @@ import java.util.Locale
 
 class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListener {
 
+    private lateinit var bottomNavigation: BottomNavigationView // ПЕРЕМЕСТИЛИ ВНУТРЬ КЛАССА
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setAppLanguage()
         super.onCreate(savedInstanceState)
@@ -16,6 +18,7 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
         GameState.initialize(this)
 
         setupNavigation()
+        updateNavigationSelection()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -58,8 +61,7 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
     }
 
     private fun setupNavigation() {
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.navigation_gameplay
+        bottomNavigation = findViewById(R.id.bottom_navigation) // ИНИЦИАЛИЗИРУЕМ ЗДЕСЬ
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -84,8 +86,14 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
         }
     }
 
+    private fun updateNavigationSelection() {
+        bottomNavigation.selectedItemId = R.id.navigation_gameplay
+    }
+
     override fun onResume() {
         super.onResume()
+        updateNavigationSelection()
+
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? Fragment_Gameplay
         fragment?.updateUI()
     }
@@ -94,5 +102,4 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
         super.onPause()
         GameState.saveState(this)
     }
-
 }

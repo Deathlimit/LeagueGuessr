@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 android:visibility="visible"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
         </LinearLayout>
@@ -243,6 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -251,6 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -259,6 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -267,6 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
 
@@ -275,6 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/alert_dark_frame"
                 tools:srcCompat="@android:drawable/alert_dark_frame" />
         </LinearLayout>
@@ -326,13 +331,6 @@
             android:layout_margin="8dp" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/loadDraftButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Load Draft"
-        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/draftInfoText"

@@ -17,7 +17,6 @@ import org.json.JSONObject
 class Fragment_Gameplay : Fragment() {
 
     private lateinit var startButton: Button
-    private lateinit var loadDraftButton: Button
     private lateinit var draftInfoText: TextView
     private val pickImageViews = mutableListOf<ImageView>()
     private val banImageViews = mutableListOf<ImageView>()
@@ -47,35 +46,33 @@ class Fragment_Gameplay : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         startButton = view.findViewById(R.id.startButton)
-        loadDraftButton = view.findViewById(R.id.loadDraftButton)
         draftInfoText = view.findViewById(R.id.draftInfoText)
         initGameplayViews()
         updateUI()
 
         startButton.setOnClickListener {
             if (GameState.isGameStarted) {
+                // Конец игры - сбрасываем всё
                 GameState.endGame()
+                resetAllImages() // Сбрасываем все изображения
+                draftInfoText.text = "Game ended. Press Start to begin."
                 gameplayListener?.onGameEnded()
             } else {
-                // Игра теперь начинается только после загрузки драфта
-                if (GameState.draftData != null && GameState.targetPickPosition != null) {
+                // Начало игры - загружаем драфт
+                if (loadDraftFromJson()) {
                     GameState.startGameWithDraft(
                         GameState.draftData!!,
                         GameState.targetPickPosition!!,
                         requireContext()
                     )
+                    draftInfoText.text = "Game started! Select your champion."
                     gameplayListener?.onGameStarted()
                 } else {
-                    // Показать сообщение, что нужно сначала загрузить драфт
-                    draftInfoText.text = "Please load draft first"
+                    draftInfoText.text = "Failed to load draft. Please try again."
                 }
             }
             GameState.saveState(requireContext())
             updateUI()
-        }
-
-        loadDraftButton.setOnClickListener {
-            loadDraftFromJson()
         }
 
         view.findViewById<Button>(R.id.button_russian).setOnClickListener {
@@ -114,7 +111,6 @@ class Fragment_Gameplay : Fragment() {
     }
 
     fun updateUI() {
-        clearAllBorders()
         updateButtonText()
         updateDraftInfo()
 
@@ -139,19 +135,20 @@ class Fragment_Gameplay : Fragment() {
     }
 
     private fun updateDraftInfo() {
-        GameState.targetPickPosition?.let { targetPosition ->
-            val teamText = if (targetPosition.team == 1) "Blue" else "Red"
-            draftInfoText.text = "Pick for $teamText team, position ${targetPosition.pickIndex + 1}"
-        } ?: run {
-            draftInfoText.text = "No target position set"
+        if (GameState.isGameStarted) {
+            GameState.targetPickPosition?.let { targetPosition ->
+                val teamText = if (targetPosition.team == 1) "Blue" else "Red"
+                draftInfoText.text = "Pick for $teamText team, position ${targetPosition.pickIndex + 1}"
+            } ?: run {
+                draftInfoText.text = "Game started - select your champion"
+            }
+        } else {
+            draftInfoText.text = "Press Start to begin"
         }
     }
 
     private fun updateDraftDisplay() {
         GameState.draftData?.let { draft ->
-            // Очищаем все изображения
-            clearAllBorders()
-
             // Отображаем банны
             draft.bans.forEach { ban ->
                 if (ban.champion != null) {
@@ -163,7 +160,10 @@ class Fragment_Gameplay : Fragment() {
 
                     if (viewIndex in banImageViews.indices) {
                         val resourceId = getChampionResourceId(ban.champion)
-                        banImageViews[viewIndex].setImageResource(resourceId)
+                        val imageView = banImageViews[viewIndex]
+                        imageView.setImageResource(resourceId)
+                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                        imageView.adjustViewBounds = true
                     }
                 }
             }
@@ -177,13 +177,18 @@ class Fragment_Gameplay : Fragment() {
                 }
 
                 if (viewIndex in pickImageViews.indices) {
+                    val imageView = pickImageViews[viewIndex]
+
                     if (pick.champion != null) {
                         // Если чемпион выбран - показываем его изображение
                         val resourceId = getChampionResourceId(pick.champion)
-                        pickImageViews[viewIndex].setImageResource(resourceId)
+                        imageView.setImageResource(resourceId)
+                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                        imageView.adjustViewBounds = true
                     } else {
                         // Если чемпион не выбран - показываем вопрос
-                        pickImageViews[viewIndex].setImageResource(R.drawable._unknown_pick_ban)
+                        imageView.setImageResource(R.drawable._unknown_pick_ban)
+                        imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                     }
                 }
             }
@@ -205,8 +210,19 @@ class Fragment_Gameplay : Fragment() {
         }
     }
 
+    // Новый метод для сброса всех изображений
+    private fun resetAllImages() {
+        pickImageViews.forEach { imageView ->
+            imageView.setImageResource(R.drawable._unknown_pick_ban)
+            imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+        banImageViews.forEach { imageView ->
+            imageView.setImageResource(R.drawable._unknown_pick_ban)
+            imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+    }
+
     private fun getChampionResourceId(championName: String): Int {
-        // Используем тот же подход, что и в Fragment_ChampionList
         val drawableResources = getDrawableChampions()
         val normalizedChampionName = championName.lowercase().replace(" ", "_")
 
@@ -239,8 +255,8 @@ class Fragment_Gameplay : Fragment() {
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
     }
 
-    private fun loadDraftFromJson() {
-        try {
+    private fun loadDraftFromJson(): Boolean {
+        return try {
             val jsonString = requireContext().assets.open("draft.json").bufferedReader().use { it.readText() }
             val jsonObject = JSONObject(jsonString)
 
@@ -283,15 +299,14 @@ class Fragment_Gameplay : Fragment() {
             val targetPick = picks.firstOrNull { it.champion == null }
             if (targetPick != null) {
                 GameState.targetPickPosition = PickPosition(targetPick.team, targetPick.position ?: 0)
-                draftInfoText.text = "Draft loaded! Target position found."
+                true
             } else {
-                draftInfoText.text = "Draft loaded but no target position found"
+                false
             }
 
-            updateUI()
-
         } catch (e: Exception) {
-            draftInfoText.text = "Error loading draft: ${e.message}"
+            e.printStackTrace()
+            false
         }
     }
 
@@ -299,23 +314,18 @@ class Fragment_Gameplay : Fragment() {
         startButton.text = if (GameState.isGameStarted) "End" else "Start"
     }
 
-    private fun clearAllBorders() {
-        pickImageViews.forEach { imageView ->
-            imageView.setImageResource(R.drawable._unknown_pick_ban)
-        }
-        banImageViews.forEach { imageView ->
-            imageView.setImageResource(R.drawable._unknown_pick_ban)
-        }
-    }
-
     private fun addRedBorder(imageView: ImageView) {
         val currentDrawable = imageView.drawable
         val border = GradientDrawable().apply {
             setColor(Color.TRANSPARENT)
-            setStroke(18, Color.RED)
+            setStroke(8, Color.RED)
             cornerRadius = 0f
         }
-        imageView.setImageDrawable(LayerDrawable(arrayOf(currentDrawable, border)))
+
+        val currentScaleType = imageView.scaleType
+        val layerDrawable = LayerDrawable(arrayOf(currentDrawable, border))
+        imageView.setImageDrawable(layerDrawable)
+        imageView.scaleType = currentScaleType
     }
 
     override fun onDetach() {

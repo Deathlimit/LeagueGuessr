@@ -36,11 +36,14 @@ object GameState {
     }
 
     fun endGame() {
+        selectedPickIndex = -1
         isGameStarted = false
         isChampionSelected = false
         selectedChampionId = -1
-        // НЕ сбрасываем draftData и targetPickPosition, чтобы сохранить состояние драфта
+        draftData = null
+        targetPickPosition = null
     }
+
 
     fun selectChampion(championId: Int, championName: String) {
         selectedChampionId = championId
