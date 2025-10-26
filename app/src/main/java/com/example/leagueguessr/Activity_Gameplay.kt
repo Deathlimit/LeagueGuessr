@@ -1,6 +1,7 @@
 package com.example.leagueguessr
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -8,11 +9,21 @@ import java.util.Locale
 
 class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListener {
 
-    private lateinit var bottomNavigation: BottomNavigationView // ПЕРЕМЕСТИЛИ ВНУТРЬ КЛАССА
+    private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setAppLanguage()
         super.onCreate(savedInstanceState)
+
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+
+        // Проверяем авторизацию
+        if (!isUserLoggedIn()) {
+            redirectToLogin()
+            return
+        }
+
         setContentView(R.layout.activity_fragments_gameplay)
 
         GameState.initialize(this)
@@ -25,6 +36,17 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
                 .replace(R.id.fragment_container, Fragment_Gameplay())
                 .commit()
         }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        return sharedPreferences.getBoolean("is_logged_in", false)
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(this, Activity_Login::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onGameStarted() {
@@ -61,7 +83,7 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
     }
 
     private fun setupNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation) // ИНИЦИАЛИЗИРУЕМ ЗДЕСЬ
+        bottomNavigation = findViewById(R.id.bottom_navigation)
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {

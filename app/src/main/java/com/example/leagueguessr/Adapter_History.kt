@@ -27,7 +27,7 @@ class Adapter_History(
         val historyItem = historyItems[position]
 
         holder.championImage.setImageResource(historyItem.championImageResId)
-        holder.resultText.text = historyItem.result
+        holder.resultText.text = "${historyItem.championName}: ${historyItem.points} points"
         holder.dateText.text = historyItem.date
     }
 

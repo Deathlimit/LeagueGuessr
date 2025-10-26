@@ -79,7 +79,7 @@ class Activity_Champions : AppCompatActivity() {
                 }
             }
 
-            GameState.selectChampion(champion.imageResId, champion.name)
+            GameState.selectChampion(champion.id, champion.name)
             GameState.saveState(this)
 
             // Завершаем активность и возвращаемся в gameplay

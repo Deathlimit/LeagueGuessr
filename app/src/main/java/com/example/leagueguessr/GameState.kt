@@ -13,6 +13,7 @@ object GameState {
     const val KEY_IS_CHAMPION_SELECTED = "is_champion_selected"
     const val KEY_DRAFT_DATA = "draft_data"
     const val KEY_TARGET_PICK_POSITION = "target_pick_position"
+    const val KEY_SELECTED_CHAMPION_NAME = "selected_champion_name"
 
     var selectedPickIndex: Int = -1
     var isGameStarted: Boolean = false
@@ -20,6 +21,7 @@ object GameState {
     var isChampionSelected: Boolean = false
     var draftData: DraftData? = null
     var targetPickPosition: PickPosition? = null
+    var selectedChampionName: String = ""
 
     fun initialize(context: Context) {
         loadState(context)
@@ -42,13 +44,15 @@ object GameState {
         selectedChampionId = -1
         draftData = null
         targetPickPosition = null
+        selectedChampionName = ""
+
     }
 
 
     fun selectChampion(championId: Int, championName: String) {
         selectedChampionId = championId
+        selectedChampionName = championName
         isChampionSelected = true
-        // Здесь можно добавить логику проверки правильности выбора
     }
 
     fun saveState(context: Context) {
@@ -57,6 +61,8 @@ object GameState {
             putBoolean(KEY_GAME_STARTED, isGameStarted)
             putInt(KEY_SELECTED_CHAMPION_ID, selectedChampionId)
             putBoolean(KEY_IS_CHAMPION_SELECTED, isChampionSelected)
+            putString(KEY_SELECTED_CHAMPION_NAME, selectedChampionName)
+
 
             targetPickPosition?.let { position ->
                 putString(KEY_TARGET_PICK_POSITION, "${position.team},${position.pickIndex}")
@@ -79,6 +85,7 @@ object GameState {
             isGameStarted = getBoolean(KEY_GAME_STARTED, false)
             selectedChampionId = getInt(KEY_SELECTED_CHAMPION_ID, -1)
             isChampionSelected = getBoolean(KEY_IS_CHAMPION_SELECTED, false)
+            selectedChampionName = getString(KEY_SELECTED_CHAMPION_NAME, "").toString()
 
             // Загружаем targetPickPosition
             getString(KEY_TARGET_PICK_POSITION, null)?.let { positionStr ->

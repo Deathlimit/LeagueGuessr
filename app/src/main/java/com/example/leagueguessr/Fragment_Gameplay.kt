@@ -12,7 +12,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 
 class Fragment_Gameplay : Fragment() {
 
@@ -52,13 +54,19 @@ class Fragment_Gameplay : Fragment() {
 
         startButton.setOnClickListener {
             if (GameState.isGameStarted) {
-                // Конец игры - сбрасываем всё
-                GameState.endGame()
-                resetAllImages() // Сбрасываем все изображения
-                draftInfoText.text = "Game ended. Press Start to begin."
-                gameplayListener?.onGameEnded()
+                if (GameState.isChampionSelected) {
+                    checkPointsAndEndGame()
+                } else {
+                    // Если игра начата, но чемпион не выбран
+                    GameState.endGame()
+                    resetAllImages()
+                    draftInfoText.text = "Game ended. No champion selected."
+                    gameplayListener?.onGameEnded()
+                    GameState.saveState(requireContext())
+                    updateUI()
+                }
             } else {
-                // Начало игры - загружаем драфт
+                // Начало игры
                 if (loadDraftFromJson()) {
                     GameState.startGameWithDraft(
                         GameState.draftData!!,
@@ -71,7 +79,6 @@ class Fragment_Gameplay : Fragment() {
                     draftInfoText.text = "Failed to load draft. Please try again."
                 }
             }
-            GameState.saveState(requireContext())
             updateUI()
         }
 
@@ -331,5 +338,93 @@ class Fragment_Gameplay : Fragment() {
     override fun onDetach() {
         super.onDetach()
         gameplayListener = null
+    }
+
+    private fun checkPointsAndEndGame() {
+        if (GameState.isGameStarted && GameState.isChampionSelected) {
+            val selectedChampionName = GameState.selectedChampionName
+            val points = getPointsForChampion(selectedChampionName)
+
+            // Сохраняем результат в JSON
+            saveGameResult(selectedChampionName, points)
+
+            // Показываем результат
+            showPointsResult(selectedChampionName, points)
+        }
+
+        // Завершаем игру
+        GameState.endGame()
+        resetAllImages()
+        draftInfoText.text = "Game ended. Press Start to begin."
+        gameplayListener?.onGameEnded()
+        GameState.saveState(requireContext())
+        updateUI()
+    }
+
+    private fun getPointsForChampion(championName: String): Int {
+        return try {
+            val jsonString = requireContext().assets.open("draft.json").bufferedReader().use { it.readText() }
+            val jsonObject = JSONObject(jsonString)
+            val pointsObject = jsonObject.getJSONObject("Points")
+
+            // Ищем чемпиона в Points (учитываем возможные различия в написании)
+            for (key in pointsObject.keys()) {
+                if (key.equals(championName, ignoreCase = true)) {
+                    return pointsObject.getInt(key)
+                }
+            }
+
+            // Если чемпион не найден, возвращаем 0
+            0
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+    }
+
+    private fun saveGameResult(championName: String, points: Int) {
+        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("user_id", -1)
+
+        if (userId != -1) {
+            val dbHelper = UserDbHelper(requireContext())
+            dbHelper.addGameResult(userId, championName, points)
+        }
+    }
+
+    private fun isChoiceCorrect(championName: String): Boolean {
+        // Здесь можно добавить логику проверки, был ли выбор правильным
+        // Например, сравнивать с правильным ответом из draft.json, если он есть
+        return true // временно всегда true
+    }
+
+    private fun saveToResultsJson(newResult: JSONObject) {
+        try {
+            val resultsFile = File(requireContext().filesDir, "results.json")
+            val resultsArray: JSONArray
+
+            if (resultsFile.exists()) {
+                val jsonString = resultsFile.readText()
+                resultsArray = JSONArray(jsonString)
+            } else {
+                resultsArray = JSONArray()
+            }
+
+            resultsArray.put(newResult)
+            resultsFile.writeText(resultsArray.toString())
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun showPointsResult(championName: String, points: Int) {
+        val message = "You selected: $championName\nPoints: $points"
+
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Game Result")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }
