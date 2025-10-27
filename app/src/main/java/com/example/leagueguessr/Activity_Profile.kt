@@ -9,9 +9,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +24,9 @@ class Activity_Profile : AppCompatActivity() {
 
     private lateinit var rankTextView: TextView
     private lateinit var usernameTextView: TextView
+    private lateinit var descriptionTextView: TextView
+
+    private lateinit var btnEditDescription: Button
     private lateinit var btnLogout: Button
     private lateinit var avatarImageView: ImageView
     private lateinit var btnChangeAvatar: Button
@@ -34,13 +39,11 @@ class Activity_Profile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        try {
             setContentView(R.layout.activity_profile)
 
             sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
 
-            // Проверяем авторизацию
+
             if (!isUserLoggedIn()) {
                 redirectToLogin()
                 return
@@ -54,43 +57,33 @@ class Activity_Profile : AppCompatActivity() {
             setupHistoryRecyclerView()
             updateRank()
             setupLogoutButton()
+            loadUserDescription()
             loadAvatar()
             setupAvatarButton()
             checkDatabaseHealth()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            // Если произошла критическая ошибка, показываем сообщение и закрываем
-            Toast.makeText(this, "Ошибка загрузки профиля", Toast.LENGTH_LONG).show()
-            finish()
-        }
+            setupDescriptionButton()
     }
 
     private fun initViews() {
-        // Исправляем ID на правильные из activity_profile.xml
         rankTextView = findViewById(R.id.rankText)
         usernameTextView = findViewById(R.id.usernameText)
         btnLogout = findViewById(R.id.btnLogout)
         avatarImageView = findViewById(R.id.avatarImageView)
+        descriptionTextView = findViewById(R.id.descriptionText)
+        btnEditDescription = findViewById(R.id.btnEditDescription)
         btnChangeAvatar = findViewById(R.id.btnChangeAvatar)
     }
 
     private fun loadAvatar() {
         val userId = sharedPreferences.getInt("user_id", -1)
         if (userId != -1) {
-            try {
+
                 val avatarBitmap = dbHelper.getUserAvatar(userId)
                 if (avatarBitmap != null) {
                     avatarImageView.setImageBitmap(avatarBitmap)
                 } else {
-                    // Устанавливаем аватарку по умолчанию
                     avatarImageView.setImageResource(R.drawable.default_avatar)
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // В случае ошибки устанавливаем аватар по умолчанию
-                avatarImageView.setImageResource(R.drawable.default_avatar)
-            }
         } else {
             avatarImageView.setImageResource(R.drawable.default_avatar)
         }
@@ -148,7 +141,6 @@ class Activity_Profile : AppCompatActivity() {
             var width = bitmap.width
             var height = bitmap.height
 
-            // Масштабируем если нужно
             if (width > maxWidth || height > maxHeight) {
                 val ratio = width.toFloat() / height.toFloat()
                 if (ratio > 1) {
@@ -194,6 +186,64 @@ class Activity_Profile : AppCompatActivity() {
     private fun setupUserInfo() {
         val username = sharedPreferences.getString("username", "")
         usernameTextView.text = "Пользователь: $username"
+    }
+
+    private fun loadUserDescription() {
+        val userId = sharedPreferences.getInt("user_id", -1)
+        if (userId != -1) {
+            val description = dbHelper.getUserDescription(userId)
+            descriptionTextView.text = description ?: "Описание не добавлено"
+        }
+    }
+
+    private fun setupDescriptionButton() {
+        btnEditDescription.setOnClickListener {
+            showEditDescriptionDialog()
+        }
+    }
+
+    private fun showEditDescriptionDialog() {
+        val userId = sharedPreferences.getInt("user_id", -1)
+        val currentDescription = dbHelper.getUserDescription(userId)
+
+        val editText = EditText(this)
+        editText.setText(currentDescription)
+        editText.hint = "Введите описание профиля"
+
+        AlertDialog.Builder(this)
+            .setTitle("Редактировать описание")
+            .setView(editText)
+            .setPositiveButton("Сохранить") { dialog, _ ->
+                val newDescription = editText.text.toString().trim()
+                if (newDescription.isNotEmpty()) {
+                    updateUserDescription(newDescription)
+                } else {
+
+                    updateUserDescription("")
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Отмена") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNeutralButton("Очистить") { dialog, _ ->
+                updateUserDescription("")
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun updateUserDescription(description: String) {
+        val userId = sharedPreferences.getInt("user_id", -1)
+        if (userId != -1) {
+            val success = dbHelper.updateUserDescription(userId, description)
+            if (success) {
+                loadUserDescription()
+                Toast.makeText(this, "Описание обновлено", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Ошибка обновления описания", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateRank() {

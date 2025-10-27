@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">League Guessr</string>
+    <string name="app_name">League Guessr New</string>
     <string name="picks">Пики</string>
     <string name="bans">Баны</string>
     <string name="start">Начать</string>

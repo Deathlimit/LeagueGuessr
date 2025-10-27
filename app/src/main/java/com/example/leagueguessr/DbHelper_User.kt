@@ -15,7 +15,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     companion object {
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "LeagueGuessr.db"
-
         const val TABLE_USERS = "users"
         const val COLUMN_USER_ID = "user_id"
         const val COLUMN_USERNAME = "username"
@@ -29,6 +28,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         const val COLUMN_CHAMPION_NAME = "champion_name"
         const val COLUMN_POINTS = "points"
         const val COLUMN_DATE = "date"
+
+        const val COLUMN_DESCRIPTION = "Description"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -39,7 +40,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 $COLUMN_EMAIL TEXT UNIQUE NOT NULL,
                 $COLUMN_PASSWORD TEXT NOT NULL,
                 $COLUMN_AVATAR BLOB,
-                $COLUMN_CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP
+                $COLUMN_CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+                $COLUMN_DESCRIPTION
             )
         """.trimIndent()
 
@@ -77,7 +79,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.close()
         return result != -1L
     }
-
     fun loginUser(username: String, password: String): User? {
         val db = readableDatabase
         val selection = "$COLUMN_USERNAME = ? AND $COLUMN_PASSWORD = ?"
@@ -85,7 +86,7 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         val cursor: Cursor = db.query(
             TABLE_USERS,
-            arrayOf(COLUMN_USER_ID, COLUMN_USERNAME, COLUMN_EMAIL),
+            arrayOf(COLUMN_USER_ID, COLUMN_USERNAME, COLUMN_EMAIL, COLUMN_DESCRIPTION),
             selection,
             selectionArgs,
             null, null, null
@@ -95,7 +96,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             User(
                 userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
                 username = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME)),
-                email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL))
+                email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)),
+                description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)) // ← ДОБАВЛЯЕМ
             )
         } else {
             null
@@ -105,6 +107,37 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         }
     }
 
+    fun updateUserDescription(userId: Int, description: String): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_DESCRIPTION, description)
+        }
+
+        val result = db.update(TABLE_USERS, values,
+            "$COLUMN_USER_ID = ?", arrayOf(userId.toString()))
+        db.close()
+        return result > 0
+    }
+
+    fun getUserDescription(userId: Int): String? {
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_USERS,
+            arrayOf(COLUMN_DESCRIPTION),
+            "$COLUMN_USER_ID = ?",
+            arrayOf(userId.toString()),
+            null, null, null
+        )
+
+        val description = if (cursor.moveToFirst()) {
+            cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION))
+        } else {
+            null
+        }
+        cursor.close()
+        db.close()
+        return description
+    }
     fun updateUserAvatar(userId: Int, avatarBitmap: Bitmap): Boolean {
         val db = writableDatabase
 
@@ -264,7 +297,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 data class User(
     val userId: Int,
     val username: String,
-    val email: String
+    val email: String,
+    val description: String? = null
 )
 
 data class Data_history(
