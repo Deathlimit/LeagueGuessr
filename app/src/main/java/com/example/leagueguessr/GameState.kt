@@ -68,7 +68,6 @@ object GameState {
                 putString(KEY_TARGET_PICK_POSITION, "${position.team},${position.pickIndex}")
             }
 
-            // Сохраняем draftData как JSON
             draftData?.let { draft ->
                 val gson = Gson()
                 val json = gson.toJson(draft)
@@ -87,7 +86,6 @@ object GameState {
             isChampionSelected = getBoolean(KEY_IS_CHAMPION_SELECTED, false)
             selectedChampionName = getString(KEY_SELECTED_CHAMPION_NAME, "").toString()
 
-            // Загружаем targetPickPosition
             getString(KEY_TARGET_PICK_POSITION, null)?.let { positionStr ->
                 val parts = positionStr.split(",")
                 if (parts.size == 2) {
@@ -95,7 +93,6 @@ object GameState {
                 }
             }
 
-            // Загружаем draftData из JSON
             val json = getString(KEY_DRAFT_DATA, null)
             json?.let {
                 val gson = Gson()
@@ -109,8 +106,6 @@ object GameState {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    fun hasSelectedPick(): Boolean = selectedPickIndex != -1
-    fun hasSelectedChampion(): Boolean = isChampionSelected && selectedChampionId != -1
 
     fun isChampionBanned(championName: String): Boolean {
         return draftData?.let { draft ->
@@ -123,38 +118,6 @@ object GameState {
             draft.picks.any { it.champion == championName }
         } ?: false
     }
-
-    fun getCurrentDraftState(): List<DraftAction> {
-        val allActions = mutableListOf<DraftAction>()
-
-        draftData?.let { draft ->
-            // Добавляем банны
-            allActions.addAll(draft.bans)
-            // Добавляем пики
-            allActions.addAll(draft.picks)
-        }
-
-        return allActions.sortedBy { it.order }
-    }
-
-    fun getTargetPickAction(): DraftAction? {
-        return targetPickPosition?.let { position ->
-            DraftAction(
-                type = "pick",
-                team = position.team,
-                order = calculateOrderForPosition(position),
-                champion = null, // Это то, что нужно угадать
-                position = position.pickIndex
-            )
-        }
-    }
-
-    private fun calculateOrderForPosition(position: PickPosition): Int {
-        // Логика расчета порядка действия в драфте
-        // Обычно драфт идет: бан1-бан2-бан1-бан2... пик1-пик2-пик2-пик1...
-        // Упрощенная реализация
-        return draftData?.bans?.size ?: 0 + position.team * 5 + position.pickIndex
-    }
 }
 
 data class DraftData(
@@ -163,14 +126,14 @@ data class DraftData(
 )
 
 data class DraftAction(
-    val type: String, // "ban" или "pick"
-    val team: Int, // 1 или 2
-    val order: Int, // порядок действия в драфте
-    val champion: String?, // имя чемпиона (null для целевого пика)
-    val position: Int? = null // позиция в команде (0-4)
+    val type: String,
+    val team: Int,
+    val order: Int,
+    val champion: String?,
+    val position: Int? = null
 )
 
 data class PickPosition(
-    val team: Int, // 1 или 2
-    val pickIndex: Int // 0-4
+    val team: Int,
+    val pickIndex: Int
 )

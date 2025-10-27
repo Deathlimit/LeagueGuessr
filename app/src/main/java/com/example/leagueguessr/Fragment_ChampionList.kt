@@ -53,11 +53,11 @@ class Fragment_ChampionList : Fragment() {
 
     private fun getChampionsForRole(role: String): List<Data_champion> {
         val championsByRole = mutableListOf<Data_champion>()
-        val drawableResources = getDrawableChampions()
+        val drawableResources = ChampionUtils.getDrawableChampions()
 
         drawableResources.forEach { (resourceName, resourceId) ->
             val roles = extractRolesFromFileName(resourceName)
-            val name = extractChampionName(resourceName)
+            val name = ChampionUtils.extractChampionName(resourceName)
 
             if (roles.contains(role)) {
                 val champion = Data_champion(
@@ -73,25 +73,6 @@ class Fragment_ChampionList : Fragment() {
         return championsByRole
     }
 
-    private fun extractChampionName(fileName: String): String {
-        return fileName.removePrefix("_champion_")
-            .substringAfter("_")
-            .replace("_", " ")
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-    }
-
-    private fun getDrawableChampions(): Map<String, Int> {
-        val resources = mutableMapOf<String, Int>()
-        val fields = R.drawable::class.java.fields
-        for (field in fields) {
-            val resourceName = field.name
-            if (resourceName.startsWith("_champion_")) {
-                val resourceId = field.getInt(null)
-                resources[resourceName] = resourceId
-            }
-        }
-        return resources
-    }
 
     private fun extractRolesFromFileName(fileName: String): List<String> {
         val pattern = "_champion_(\\d+)_.+".toRegex()

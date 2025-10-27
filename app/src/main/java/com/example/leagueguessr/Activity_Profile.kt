@@ -1,11 +1,13 @@
 package com.example.leagueguessr
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -54,6 +56,7 @@ class Activity_Profile : AppCompatActivity() {
             setupLogoutButton()
             loadAvatar()
             setupAvatarButton()
+            checkDatabaseHealth()
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -72,7 +75,6 @@ class Activity_Profile : AppCompatActivity() {
         btnChangeAvatar = findViewById(R.id.btnChangeAvatar)
     }
 
-    // Остальной код остается без изменений...
     private fun loadAvatar() {
         val userId = sharedPreferences.getInt("user_id", -1)
         if (userId != -1) {
@@ -101,14 +103,9 @@ class Activity_Profile : AppCompatActivity() {
     }
 
     private fun openImageChooser() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-        startActivityForResult(
-            Intent.createChooser(intent, "Выберите аватар"),
-            PICK_IMAGE_REQUEST
-        )
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -214,51 +211,16 @@ class Activity_Profile : AppCompatActivity() {
 
     private fun setupHistoryRecyclerView() {
         val historyRecyclerView: RecyclerView = findViewById(R.id.historyRecyclerView)
-        val historyItems = loadResultsFromDatabase()
+        val userId = sharedPreferences.getInt("user_id", -1)
+        val historyItems = if (userId != -1) dbHelper.getUserGameHistory(userId) else emptyList()
 
         val adapter = Adapter_History(historyItems)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = adapter
     }
 
-    private fun loadResultsFromDatabase(): List<Data_history> {
-        val userId = sharedPreferences.getInt("user_id", -1)
-        if (userId == -1) return emptyList()
 
-        val historyList = dbHelper.getUserGameHistory(userId)
 
-        return historyList.map { gameHistory ->
-            val resourceId = getChampionResourceId(gameHistory.championName)
-            Data_history(
-                championImageResId = resourceId,
-                result = "${gameHistory.championName}: ${gameHistory.points} очков",
-                date = gameHistory.date,
-                points = gameHistory.points,
-                championName = gameHistory.championName
-            )
-        }
-    }
-
-    private fun getChampionResourceId(championName: String): Int {
-        val fields = R.drawable::class.java.fields
-        for (field in fields) {
-            val resourceName = field.name
-            if (resourceName.startsWith("_champion_")) {
-                val nameFromResource = extractChampionName(resourceName)
-                if (nameFromResource.equals(championName, ignoreCase = true)) {
-                    return field.getInt(null)
-                }
-            }
-        }
-        return R.drawable._unknown_pick_ban
-    }
-
-    private fun extractChampionName(fileName: String): String {
-        return fileName.removePrefix("_champion_")
-            .substringAfter("_")
-            .replace("_", " ")
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-    }
 
     private fun setupNavigation() {
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -285,6 +247,20 @@ class Activity_Profile : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+    private fun checkDatabaseHealth() {
+        try {
+            val userId = sharedPreferences.getInt("user_id", -1)
+            if (userId != -1) {
+                val history = dbHelper.getUserGameHistory(userId)
+                Toast.makeText(this, "\"Database health check: User history count = ${history.size}\"", Toast.LENGTH_LONG).show()
+
+                val avatar = dbHelper.getUserAvatar(userId)
+                Toast.makeText(this, "Database health check: Avatar exists = ${avatar != null}", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Database health check failed: ${e.message}")
         }
     }
 

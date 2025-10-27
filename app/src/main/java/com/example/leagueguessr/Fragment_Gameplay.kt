@@ -57,7 +57,6 @@ class Fragment_Gameplay : Fragment() {
                 if (GameState.isChampionSelected) {
                     checkPointsAndEndGame()
                 } else {
-                    // Если игра начата, но чемпион не выбран
                     GameState.endGame()
                     resetAllImages()
                     draftInfoText.text = "Game ended. No champion selected."
@@ -124,7 +123,6 @@ class Fragment_Gameplay : Fragment() {
         if (GameState.draftData != null) {
             updateDraftDisplay()
 
-            // Подсвечиваем целевой пик только если игра начата
             if (GameState.isGameStarted) {
                 GameState.targetPickPosition?.let { targetPosition ->
                     val viewIndex = if (targetPosition.team == 1) {
@@ -166,11 +164,11 @@ class Fragment_Gameplay : Fragment() {
                     }
 
                     if (viewIndex in banImageViews.indices) {
-                        val resourceId = getChampionResourceId(ban.champion)
+                        val resourceId = ChampionUtils.getChampionResourceId(ban.champion)
                         val imageView = banImageViews[viewIndex]
                         imageView.setImageResource(resourceId)
-                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                        imageView.adjustViewBounds = true
+                        imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+                        imageView.adjustViewBounds = false
                     }
                 }
             }
@@ -187,20 +185,19 @@ class Fragment_Gameplay : Fragment() {
                     val imageView = pickImageViews[viewIndex]
 
                     if (pick.champion != null) {
-                        // Если чемпион выбран - показываем его изображение
-                        val resourceId = getChampionResourceId(pick.champion)
+                        val resourceId = ChampionUtils.getChampionResourceId(pick.champion)
                         imageView.setImageResource(resourceId)
-                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                        imageView.adjustViewBounds = true
+                        imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+                        imageView.adjustViewBounds = false
                     } else {
                         // Если чемпион не выбран - показываем вопрос
                         imageView.setImageResource(R.drawable._unknown_pick_ban)
                         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+                        imageView.adjustViewBounds = false
                     }
                 }
             }
 
-            // Подсвечиваем целевой пик красной рамкой, если игра активна
             if (GameState.isGameStarted) {
                 GameState.targetPickPosition?.let { targetPosition ->
                     val viewIndex = if (targetPosition.team == 1) {
@@ -217,49 +214,17 @@ class Fragment_Gameplay : Fragment() {
         }
     }
 
-    // Новый метод для сброса всех изображений
     private fun resetAllImages() {
         pickImageViews.forEach { imageView ->
             imageView.setImageResource(R.drawable._unknown_pick_ban)
             imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+            imageView.adjustViewBounds = false
         }
         banImageViews.forEach { imageView ->
             imageView.setImageResource(R.drawable._unknown_pick_ban)
             imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+            imageView.adjustViewBounds = false
         }
-    }
-
-    private fun getChampionResourceId(championName: String): Int {
-        val drawableResources = getDrawableChampions()
-        val normalizedChampionName = championName.lowercase().replace(" ", "_")
-
-        drawableResources.forEach { (resourceName, resourceId) ->
-            val nameFromResource = extractChampionName(resourceName)
-            if (nameFromResource.equals(championName, ignoreCase = true)) {
-                return resourceId
-            }
-        }
-        return R.drawable._unknown_pick_ban
-    }
-
-    private fun getDrawableChampions(): Map<String, Int> {
-        val resources = mutableMapOf<String, Int>()
-        val fields = R.drawable::class.java.fields
-        for (field in fields) {
-            val resourceName = field.name
-            if (resourceName.startsWith("_champion_")) {
-                val resourceId = field.getInt(null)
-                resources[resourceName] = resourceId
-            }
-        }
-        return resources
-    }
-
-    private fun extractChampionName(fileName: String): String {
-        return fileName.removePrefix("_champion_")
-            .substringAfter("_")
-            .replace("_", " ")
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
     }
 
     private fun loadDraftFromJson(): Boolean {
@@ -302,7 +267,7 @@ class Fragment_Gameplay : Fragment() {
             val draftData = DraftData(bans, picks)
             GameState.draftData = draftData
 
-            // Находим целевой пик (первый пик с champion = null)
+            // Пустой пик
             val targetPick = picks.firstOrNull { it.champion == null }
             if (targetPick != null) {
                 GameState.targetPickPosition = PickPosition(targetPick.team, targetPick.position ?: 0)
@@ -345,14 +310,11 @@ class Fragment_Gameplay : Fragment() {
             val selectedChampionName = GameState.selectedChampionName
             val points = getPointsForChampion(selectedChampionName)
 
-            // Сохраняем результат в JSON
             saveGameResult(selectedChampionName, points)
 
-            // Показываем результат
             showPointsResult(selectedChampionName, points)
         }
 
-        // Завершаем игру
         GameState.endGame()
         resetAllImages()
         draftInfoText.text = "Game ended. Press Start to begin."
@@ -362,24 +324,16 @@ class Fragment_Gameplay : Fragment() {
     }
 
     private fun getPointsForChampion(championName: String): Int {
-        return try {
             val jsonString = requireContext().assets.open("draft.json").bufferedReader().use { it.readText() }
             val jsonObject = JSONObject(jsonString)
             val pointsObject = jsonObject.getJSONObject("Points")
 
-            // Ищем чемпиона в Points (учитываем возможные различия в написании)
             for (key in pointsObject.keys()) {
                 if (key.equals(championName, ignoreCase = true)) {
                     return pointsObject.getInt(key)
                 }
             }
-
-            // Если чемпион не найден, возвращаем 0
-            0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            0
-        }
+            return 0
     }
 
     private fun saveGameResult(championName: String, points: Int) {
@@ -392,31 +346,7 @@ class Fragment_Gameplay : Fragment() {
         }
     }
 
-    private fun isChoiceCorrect(championName: String): Boolean {
-        // Здесь можно добавить логику проверки, был ли выбор правильным
-        // Например, сравнивать с правильным ответом из draft.json, если он есть
-        return true // временно всегда true
-    }
 
-    private fun saveToResultsJson(newResult: JSONObject) {
-        try {
-            val resultsFile = File(requireContext().filesDir, "results.json")
-            val resultsArray: JSONArray
-
-            if (resultsFile.exists()) {
-                val jsonString = resultsFile.readText()
-                resultsArray = JSONArray(jsonString)
-            } else {
-                resultsArray = JSONArray()
-            }
-
-            resultsArray.put(newResult)
-            resultsFile.writeText(resultsArray.toString())
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun showPointsResult(championName: String, points: Int) {
         val message = "You selected: $championName\nPoints: $points"

@@ -51,22 +51,19 @@ class Activity_Champions : AppCompatActivity() {
 
     private fun onChampionSelected(champion: Data_champion) {
         if (GameState.isGameStarted) {
-            // Проверяем, не забанен ли чемпион и не выбран ли уже
             if (GameState.isChampionBanned(champion.name)) {
-                // Показать сообщение, что чемпион забанен
+                // TDO: ЕСЛИ ЗАБАНЕН УЖЕ
                 return
             }
 
             if (GameState.isChampionPicked(champion.name)) {
-                // Показать сообщение, что чемпион уже выбран
+                // TDO: ЕСЛИ ПИКНУТ УЖЕ
                 return
             }
 
-            // ОБНОВЛЯЕМ ДРАФТ ДАННЫЕ
             GameState.draftData?.let { draft ->
                 val targetPosition = GameState.targetPickPosition
                 if (targetPosition != null) {
-                    // Находим пик в списке picks, который соответствует targetPosition
                     val updatedPicks = draft.picks.map { pick ->
                         if (pick.team == targetPosition.team && pick.position == targetPosition.pickIndex) {
                             pick.copy(champion = champion.name)
@@ -82,7 +79,6 @@ class Activity_Champions : AppCompatActivity() {
             GameState.selectChampion(champion.id, champion.name)
             GameState.saveState(this)
 
-            // Завершаем активность и возвращаемся в gameplay
             finish()
         }
     }

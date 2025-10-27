@@ -18,7 +18,6 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
 
-        // Проверяем авторизацию
         if (!isUserLoggedIn()) {
             redirectToLogin()
             return
@@ -50,11 +49,11 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
     }
 
     override fun onGameStarted() {
-        // Логика при начале игры
+        // TDO: Логика при начале игры
     }
 
     override fun onGameEnded() {
-        // Логика при окончании игры
+        // TDO: Логика при окончании игры
     }
 
     override fun onLanguageChanged(languageCode: String) {

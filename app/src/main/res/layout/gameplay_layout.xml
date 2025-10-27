@@ -23,6 +23,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textViewBansLeft"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -37,9 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
+                android:minHeight="150px"
                 android:visibility="visible"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanLeft2"
@@ -47,8 +49,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanLeft3"
@@ -56,8 +59,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanLeft4"
@@ -65,8 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanLeft5"
@@ -74,11 +79,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
 
         <!-- Левая колонка с пиками -->
+
+        <!-- Правая колонка с пиками -->
         <LinearLayout
             android:id="@+id/PicksLeft"
             android:layout_width="match_parent"
@@ -93,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_weight="0.1"
                 android:gravity="center"
                 android:text="@string/picks"
                 android:textSize="24sp"
@@ -149,7 +158,6 @@
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
 
-        <!-- Правая колонка с пиками -->
         <LinearLayout
             android:id="@+id/PicksRight"
             android:layout_width="match_parent"
@@ -164,6 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_weight="0.1"
                 android:gravity="center"
                 android:text="@string/picks"
                 android:textSize="24sp"
@@ -229,7 +238,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textViewBansRight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -244,8 +253,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanRight2"
@@ -253,8 +263,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanRight3"
@@ -262,8 +273,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanRight4"
@@ -271,8 +283,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/BanRight5"
@@ -280,8 +293,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/alert_dark_frame"
-                tools:srcCompat="@android:drawable/alert_dark_frame" />
+                android:minHeight="150px"
+                app:srcCompat="@drawable/_unknown_pick_ban"
+                tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
     </LinearLayout>
 

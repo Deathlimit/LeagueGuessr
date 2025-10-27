@@ -32,7 +32,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        // Таблица пользователей с аватаркой как BLOB
         val createUsersTable = """
             CREATE TABLE $TABLE_USERS (
                 $COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,7 +43,7 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             )
         """.trimIndent()
 
-        // Таблица истории игр
+
         val createHistoryTable = """
             CREATE TABLE $TABLE_GAME_HISTORY (
                 $COLUMN_HISTORY_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,7 +65,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         onCreate(db)
     }
 
-    // Регистрация пользователя
     fun registerUser(username: String, email: String, password: String): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -80,7 +78,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return result != -1L
     }
 
-    // Авторизация пользователя (без загрузки аватарки для скорости)
     fun loginUser(username: String, password: String): User? {
         val db = readableDatabase
         val selection = "$COLUMN_USERNAME = ? AND $COLUMN_PASSWORD = ?"
@@ -88,7 +85,7 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         val cursor: Cursor = db.query(
             TABLE_USERS,
-            arrayOf(COLUMN_USER_ID, COLUMN_USERNAME, COLUMN_EMAIL), // Не загружаем аватарку при логине
+            arrayOf(COLUMN_USER_ID, COLUMN_USERNAME, COLUMN_EMAIL),
             selection,
             selectionArgs,
             null, null, null
@@ -108,11 +105,9 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         }
     }
 
-    // Обновление аватарки пользователя
     fun updateUserAvatar(userId: Int, avatarBitmap: Bitmap): Boolean {
         val db = writableDatabase
 
-        // Сжимаем Bitmap в байтовый массив
         val outputStream = ByteArrayOutputStream()
         avatarBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
         val avatarBytes = outputStream.toByteArray()
@@ -127,8 +122,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return result > 0
     }
 
-    // Получение аватарки пользователя
-// Получение аватарки пользователя
     fun getUserAvatar(userId: Int): Bitmap? {
         val db = readableDatabase
         val cursor = db.query(
@@ -141,7 +134,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         val bitmap = if (cursor.moveToFirst()) {
             val avatarBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_AVATAR))
-            // ДОБАВЬТЕ ПРОВЕРКУ НА NULL И ПУСТОЙ МАССИВ
             if (avatarBytes != null && avatarBytes.isNotEmpty()) {
                 BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
             } else {
@@ -155,7 +147,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return bitmap
     }
 
-    // Проверка существования пользователя
     fun isUsernameTaken(username: String): Boolean {
         val db = readableDatabase
         val cursor = db.query(
@@ -171,7 +162,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return exists
     }
 
-    // Проверка существования email
     fun isEmailTaken(email: String): Boolean {
         val db = readableDatabase
         val cursor = db.query(
@@ -187,7 +177,6 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return exists
     }
 
-    // Добавление результата игры
     fun addGameResult(userId: Int, championName: String, points: Int) {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -199,9 +188,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.close()
     }
 
-    // Получение истории игр пользователя
-    fun getUserGameHistory(userId: Int): List<GameHistory> {
-        val historyList = mutableListOf<GameHistory>()
+    fun getUserGameHistory(userId: Int): List<Data_history> {
+        val historyList = mutableListOf<Data_history>()
         val db = readableDatabase
         val cursor = db.query(
             TABLE_GAME_HISTORY,
@@ -214,13 +202,19 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         with(cursor) {
             while (moveToNext()) {
+                val championName = getString(getColumnIndexOrThrow(COLUMN_CHAMPION_NAME))
+                val points = getInt(getColumnIndexOrThrow(COLUMN_POINTS))
+                val date = getString(getColumnIndexOrThrow(COLUMN_DATE))
+
                 historyList.add(
-                    GameHistory(
+                    Data_history(
                         historyId = getInt(getColumnIndexOrThrow(COLUMN_HISTORY_ID)),
                         userId = getInt(getColumnIndexOrThrow(COLUMN_USER_ID)),
-                        championName = getString(getColumnIndexOrThrow(COLUMN_CHAMPION_NAME)),
-                        points = getInt(getColumnIndexOrThrow(COLUMN_POINTS)),
-                        date = getString(getColumnIndexOrThrow(COLUMN_DATE))
+                        championImageResId = ChampionUtils.getChampionResourceId(championName),
+                        result = "$championName: $points points",
+                        date = date,
+                        points = points,
+                        championName = championName
                     )
                 )
             }
@@ -230,7 +224,7 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return historyList
     }
 
-    // Получение суммы очков за последние 10 игр
+
     fun getTotalPointsLast10Games(userId: Int): Int {
         val db = readableDatabase
         val query = """
@@ -263,6 +257,8 @@ class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             password
         }
     }
+
+
 }
 
 data class User(
@@ -271,10 +267,12 @@ data class User(
     val email: String
 )
 
-data class GameHistory(
-    val historyId: Int,
-    val userId: Int,
-    val championName: String,
-    val points: Int,
-    val date: String
+data class Data_history(
+    val historyId: Int = 0,
+    val userId: Int = 0,
+    val championImageResId: Int,
+    val result: String,
+    val date: String,
+    val points: Int = 0,
+    val championName: String = ""
 )
