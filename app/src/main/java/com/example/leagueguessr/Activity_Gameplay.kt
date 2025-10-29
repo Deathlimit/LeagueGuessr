@@ -97,7 +97,6 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
                 }
                 R.id.navigation_profile -> {
                     val intent = Intent(this, Activity_Profile::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true

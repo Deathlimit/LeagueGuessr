@@ -185,14 +185,14 @@ class Activity_Profile : AppCompatActivity() {
 
     private fun setupUserInfo() {
         val username = sharedPreferences.getString("username", "")
-        usernameTextView.text = "Пользователь: $username"
+        usernameTextView.text = "   $username"
     }
 
     private fun loadUserDescription() {
         val userId = sharedPreferences.getInt("user_id", -1)
         if (userId != -1) {
             val description = dbHelper.getUserDescription(userId)
-            descriptionTextView.text = description ?: "Описание не добавлено"
+            descriptionTextView.text = description ?: ""
         }
     }
 
@@ -285,14 +285,13 @@ class Activity_Profile : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_classes -> {
                     val intent = Intent(this, Activity_Champions::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true
                 }
                 R.id.navigation_gameplay -> {
                     val intent = Intent(this, Activity_Gameplay::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     startActivity(intent)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     true
