@@ -356,4 +356,14 @@
         android:text="No draft loaded"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone"
+        android:gravity="center"
+        android:textColor="#FF5722"
+        android:layout_marginBottom="8dp" />
+
 </LinearLayout>

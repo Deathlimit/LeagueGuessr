@@ -22,6 +22,8 @@ object GameState {
     var draftData: DraftData? = null
     var targetPickPosition: PickPosition? = null
     var selectedChampionName: String = ""
+    var isDraftFromServer: Boolean = false
+
 
     fun initialize(context: Context) {
         loadState(context)
@@ -33,6 +35,7 @@ object GameState {
         isGameStarted = true
         isChampionSelected = false
         selectedChampionId = -1
+        isDraftFromServer = true
 
         saveState(context)
     }
@@ -122,7 +125,8 @@ object GameState {
 
 data class DraftData(
     val bans: List<DraftAction>,
-    val picks: List<DraftAction>
+    val picks: List<DraftAction>,
+    val points: Map<String, Int> = emptyMap()
 )
 
 data class DraftAction(

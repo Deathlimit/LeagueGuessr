@@ -12,6 +12,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -22,6 +26,10 @@ class Fragment_Gameplay : Fragment() {
     private lateinit var draftInfoText: TextView
     private val pickImageViews = mutableListOf<ImageView>()
     private val banImageViews = mutableListOf<ImageView>()
+
+    private lateinit var loadingText: TextView
+
+    private var loadDraftJob: Job? = null
 
     interface GameplayListener {
         fun onGameStarted()
@@ -49,6 +57,7 @@ class Fragment_Gameplay : Fragment() {
 
         startButton = view.findViewById(R.id.startButton)
         draftInfoText = view.findViewById(R.id.draftInfoText)
+        loadingText = view.findViewById(R.id.loadingText)
         initGameplayViews()
         updateUI()
 
@@ -66,17 +75,7 @@ class Fragment_Gameplay : Fragment() {
                 }
             } else {
                 // Начало игры
-                if (loadDraftFromJson()) {
-                    GameState.startGameWithDraft(
-                        GameState.draftData!!,
-                        GameState.targetPickPosition!!,
-                        requireContext()
-                    )
-                    draftInfoText.text = "Game started! Select your champion."
-                    gameplayListener?.onGameStarted()
-                } else {
-                    draftInfoText.text = "Failed to load draft. Please try again."
-                }
+                loadDraftFromServer()
             }
             updateUI()
         }
@@ -264,7 +263,16 @@ class Fragment_Gameplay : Fragment() {
                 ))
             }
 
-            val draftData = DraftData(bans, picks)
+            // Загружаем очки
+            val points = mutableMapOf<String, Int>()
+            if (jsonObject.has("Points")) {
+                val pointsObject = jsonObject.getJSONObject("Points")
+                for (key in pointsObject.keys()) {
+                    points[key] = pointsObject.getInt(key)
+                }
+            }
+
+            val draftData = DraftData(bans, picks, points)
             GameState.draftData = draftData
 
             // Пустой пик
@@ -324,16 +332,46 @@ class Fragment_Gameplay : Fragment() {
     }
 
     private fun getPointsForChampion(championName: String): Int {
-            val jsonString = requireContext().assets.open("draft.json").bufferedReader().use { it.readText() }
-            val jsonObject = JSONObject(jsonString)
-            val pointsObject = jsonObject.getJSONObject("Points")
-
-            for (key in pointsObject.keys()) {
+        // Сначала проверяем очки в загруженном драфте
+        GameState.draftData?.points?.let { pointsMap ->
+            // Ищем точное совпадение
+            if (pointsMap.containsKey(championName)) {
+                return pointsMap[championName] ?: 0
+            }
+            // Ищем без учета регистра
+            for ((key, value) in pointsMap) {
                 if (key.equals(championName, ignoreCase = true)) {
-                    return pointsObject.getInt(key)
+                    return value
                 }
             }
-            return 0
+        }
+
+        // Если в драфте нет очков, пробуем загрузить из локального файла
+        return try {
+            val inputStream = requireContext().assets.open("draft.json")
+            val jsonString = inputStream.bufferedReader().use { it.readText() }
+            val jsonObject = JSONObject(jsonString)
+
+            if (jsonObject.has("Points")) {
+                val pointsObject = jsonObject.getJSONObject("Points")
+                if (pointsObject.has(championName)) {
+                    pointsObject.getInt(championName)
+                } else {
+
+                    for (key in pointsObject.keys()) {
+                        if (key.equals(championName, ignoreCase = true)) {
+                            return pointsObject.getInt(key)
+                        }
+                    }
+                    0
+                }
+            } else {
+                0
+            }
+        } catch (e: Exception) {
+            println("❌ Error loading points from local file: ${e.message}")
+            0
+        }
     }
 
     private fun saveGameResult(championName: String, points: Int) {
@@ -344,7 +382,9 @@ class Fragment_Gameplay : Fragment() {
             val dbHelper = UserDbHelper(requireContext())
             dbHelper.addGameResult(userId, championName, points)
         }
+
     }
+
 
 
 
@@ -357,4 +397,78 @@ class Fragment_Gameplay : Fragment() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+    private fun loadDraftFromServer() {
+        loadingText.visibility = View.VISIBLE
+        draftInfoText.text = "Loading from server..."
+        startButton.isEnabled = false
+
+        loadDraftJob = CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val serverDraft = DraftApiService.fetchDraftFromServer()
+
+                if (serverDraft != null) {
+                    // Успех - используем серверный драфт
+                    setupDraftFromData(serverDraft, "Server")
+                } else {
+                    // Fallback на локальный файл
+                    loadingText.text = "Server unavailable, using local draft"
+                    if (loadDraftFromJson()) {
+                        setupDraftFromData(GameState.draftData!!, "Local")
+                    } else {
+                        loadingText.text = "Failed to load any draft"
+                    }
+                }
+            } catch (e: Exception) {
+                // Ошибка - пробуем локальный файл
+                draftInfoText.text = "Error: ${e.message}"
+                if (loadDraftFromJson()) {
+                    setupDraftFromData(GameState.draftData!!, "Local")
+                }
+            } finally {
+                startButton.isEnabled = true
+                updateUI()
+            }
+        }
+    }
+
+    // Вспомогательный метод для настройки драфта
+    private fun setupDraftFromData(draftData: DraftData, source: String) {
+        GameState.draftData = draftData
+
+        // Логирование при установке драфта
+        println("\n🎮 SETTING UP DRAFT FROM: $source")
+        println("📊 Total bans: ${draftData.bans.size}, picks: ${draftData.picks.size}")
+
+        draftData.bans.forEach { ban ->
+            println("   🚫 Ban: Team ${ban.team}, Pos ${ban.position}, Champion: ${ban.champion}")
+        }
+
+        draftData.picks.forEach { pick ->
+            val status = if (pick.champion == null) "EMPTY" else "FILLED"
+            println("   ✅ Pick: Team ${pick.team}, Pos ${pick.position}, Champion: ${pick.champion ?: "???"} ($status)")
+        }
+
+        val targetPick = draftData.picks.firstOrNull { it.champion == null }
+
+        if (targetPick != null) {
+            GameState.targetPickPosition = PickPosition(targetPick.team, targetPick.position ?: 0)
+            GameState.startGameWithDraft(draftData, GameState.targetPickPosition!!, requireContext())
+            draftInfoText.text = "Game started! ($source)"
+            gameplayListener?.onGameStarted()
+
+            // Логирование целевого пика
+            println("🎯 TARGET PICK: Team ${targetPick.team}, Position ${targetPick.position}")
+        } else {
+            draftInfoText.text = "No empty picks found"
+            println("⚠️ No empty picks found in draft")
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        loadDraftJob?.cancel()
+    }
+
+
 }
