@@ -57,9 +57,11 @@
                         android:layout_marginLeft="30dp"
                         android:layout_marginRight="30dp"
                         android:layout_weight="5"
+                        android:fontFamily="sans-serif-black"
                         android:gravity="center_vertical"
                         android:text="Guest"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textSize="23sp" />
 
                     <TextView
                         android:id="@+id/descriptionText"
@@ -73,6 +75,35 @@
                         android:textAlignment="center" />
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Кнопки смены языка -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
+
+                <Button
+                    android:id="@+id/button_russian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RU"
+                    android:backgroundTint="@color/button_background"
+                    android:textColor="@color/button_text"
+                    android:layout_margin="8dp" />
+
+                <Button
+                    android:id="@+id/button_english"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EN"
+                    android:backgroundTint="@color/button_background"
+                    android:textColor="@color/button_text"
+                    android:layout_margin="8dp" />
 
             </LinearLayout>
 

@@ -16,16 +16,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 
 class Fragment_Gameplay : Fragment() {
 
     private lateinit var startButton: Button
     private lateinit var draftInfoText: TextView
-    private val pickImageViews = mutableListOf<ImageView>()
-    private val banImageViews = mutableListOf<ImageView>()
+    private var pickImageViews = mutableListOf<ImageView>()
+    private var banImageViews = mutableListOf<ImageView>()
 
     private lateinit var loadingText: TextView
 
@@ -34,7 +32,6 @@ class Fragment_Gameplay : Fragment() {
     interface GameplayListener {
         fun onGameStarted()
         fun onGameEnded()
-        fun onLanguageChanged(languageCode: String)
     }
 
     private var gameplayListener: GameplayListener? = null
@@ -49,7 +46,7 @@ class Fragment_Gameplay : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.gameplay_layout, container, false)
+        return inflater.inflate(R.layout.fragment_gameplay, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,6 +58,12 @@ class Fragment_Gameplay : Fragment() {
         initGameplayViews()
         updateUI()
 
+        if (GameState.isGameStarted && GameState.draftData != null) {
+            draftInfoText.text = "Game resumed"
+            loadingText.text = ""
+            updateDraftDisplay()
+        }
+
         startButton.setOnClickListener {
             if (GameState.isGameStarted) {
                 if (GameState.isChampionSelected) {
@@ -68,24 +71,14 @@ class Fragment_Gameplay : Fragment() {
                 } else {
                     GameState.endGame()
                     resetAllImages()
-                    draftInfoText.text = "Game ended. No champion selected."
                     gameplayListener?.onGameEnded()
                     GameState.saveState(requireContext())
                     updateUI()
                 }
             } else {
-                // Начало игры
                 loadDraftFromServer()
             }
             updateUI()
-        }
-
-        view.findViewById<Button>(R.id.button_russian).setOnClickListener {
-            gameplayListener?.onLanguageChanged("ru")
-        }
-
-        view.findViewById<Button>(R.id.button_english).setOnClickListener {
-            gameplayListener?.onLanguageChanged("en")
         }
     }
 
@@ -119,22 +112,23 @@ class Fragment_Gameplay : Fragment() {
         updateButtonText()
         updateDraftInfo()
 
-        if (GameState.draftData != null) {
+
+        if (GameState.isGameStarted && GameState.draftData != null) {
             updateDraftDisplay()
 
-            if (GameState.isGameStarted) {
-                GameState.targetPickPosition?.let { targetPosition ->
-                    val viewIndex = if (targetPosition.team == 1) {
-                        targetPosition.pickIndex
-                    } else {
-                        targetPosition.pickIndex + 5
-                    }
+            GameState.targetPickPosition?.let { targetPosition ->
+                val viewIndex = if (targetPosition.team == 1) {
+                    targetPosition.pickIndex
+                } else {
+                    targetPosition.pickIndex + 5
+                }
 
-                    if (viewIndex in pickImageViews.indices) {
-                        addRedBorder(pickImageViews[viewIndex])
-                    }
+                if (viewIndex in pickImageViews.indices) {
+                    addRedBorder(pickImageViews[viewIndex])
                 }
             }
+        } else if (GameState.draftData != null) {
+            updateDraftDisplay()
         }
     }
 
@@ -143,11 +137,9 @@ class Fragment_Gameplay : Fragment() {
             GameState.targetPickPosition?.let { targetPosition ->
                 val teamText = if (targetPosition.team == 1) "Blue" else "Red"
                 draftInfoText.text = "Pick for $teamText team, position ${targetPosition.pickIndex + 1}"
-            } ?: run {
-                draftInfoText.text = "Game started - select your champion"
             }
         } else {
-            draftInfoText.text = "Press Start to begin"
+            draftInfoText.text = ""
         }
     }
 
@@ -325,53 +317,22 @@ class Fragment_Gameplay : Fragment() {
 
         GameState.endGame()
         resetAllImages()
-        draftInfoText.text = "Game ended. Press Start to begin."
         gameplayListener?.onGameEnded()
         GameState.saveState(requireContext())
         updateUI()
     }
 
     private fun getPointsForChampion(championName: String): Int {
-        // Сначала проверяем очки в загруженном драфте
         GameState.draftData?.points?.let { pointsMap ->
-            // Ищем точное совпадение
-            if (pointsMap.containsKey(championName)) {
-                return pointsMap[championName] ?: 0
-            }
-            // Ищем без учета регистра
+            pointsMap[championName]?.let { return it }
+
             for ((key, value) in pointsMap) {
                 if (key.equals(championName, ignoreCase = true)) {
                     return value
                 }
             }
         }
-
-        // Если в драфте нет очков, пробуем загрузить из локального файла
-        return try {
-            val inputStream = requireContext().assets.open("draft.json")
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            val jsonObject = JSONObject(jsonString)
-
-            if (jsonObject.has("Points")) {
-                val pointsObject = jsonObject.getJSONObject("Points")
-                if (pointsObject.has(championName)) {
-                    pointsObject.getInt(championName)
-                } else {
-
-                    for (key in pointsObject.keys()) {
-                        if (key.equals(championName, ignoreCase = true)) {
-                            return pointsObject.getInt(key)
-                        }
-                    }
-                    0
-                }
-            } else {
-                0
-            }
-        } catch (e: Exception) {
-            println("❌ Error loading points from local file: ${e.message}")
-            0
-        }
+        return 0
     }
 
     private fun saveGameResult(championName: String, points: Int) {
@@ -386,8 +347,6 @@ class Fragment_Gameplay : Fragment() {
     }
 
 
-
-
     private fun showPointsResult(championName: String, points: Int) {
         val message = "You selected: $championName\nPoints: $points"
 
@@ -400,31 +359,22 @@ class Fragment_Gameplay : Fragment() {
 
     private fun loadDraftFromServer() {
         loadingText.visibility = View.VISIBLE
-        draftInfoText.text = "Loading from server..."
+        loadingText.text = "Loading from server..."
         startButton.isEnabled = false
 
         loadDraftJob = CoroutineScope(Dispatchers.Main).launch {
             try {
-                val serverDraft = DraftApiService.fetchDraftFromServer()
+                val serverDraft = Api_Draft.fetchDraftFromServer()
 
                 if (serverDraft != null) {
-                    // Успех - используем серверный драфт
+                    loadingText.text = ""
                     setupDraftFromData(serverDraft, "Server")
-                } else {
-                    // Fallback на локальный файл
-                    loadingText.text = "Server unavailable, using local draft"
-                    if (loadDraftFromJson()) {
-                        setupDraftFromData(GameState.draftData!!, "Local")
-                    } else {
-                        loadingText.text = "Failed to load any draft"
-                    }
                 }
+
             } catch (e: Exception) {
-                // Ошибка - пробуем локальный файл
-                draftInfoText.text = "Error: ${e.message}"
-                if (loadDraftFromJson()) {
-                    setupDraftFromData(GameState.draftData!!, "Local")
-                }
+                loadingText.text = "Connection to server failed. Loading local draft."
+                loadDraftFromJson()
+                setupDraftFromData(GameState.draftData!!, "Local")
             } finally {
                 startButton.isEnabled = true
                 updateUI()
@@ -432,36 +382,15 @@ class Fragment_Gameplay : Fragment() {
         }
     }
 
-    // Вспомогательный метод для настройки драфта
     private fun setupDraftFromData(draftData: DraftData, source: String) {
         GameState.draftData = draftData
-
-        // Логирование при установке драфта
-        println("\n🎮 SETTING UP DRAFT FROM: $source")
-        println("📊 Total bans: ${draftData.bans.size}, picks: ${draftData.picks.size}")
-
-        draftData.bans.forEach { ban ->
-            println("   🚫 Ban: Team ${ban.team}, Pos ${ban.position}, Champion: ${ban.champion}")
-        }
-
-        draftData.picks.forEach { pick ->
-            val status = if (pick.champion == null) "EMPTY" else "FILLED"
-            println("   ✅ Pick: Team ${pick.team}, Pos ${pick.position}, Champion: ${pick.champion ?: "???"} ($status)")
-        }
 
         val targetPick = draftData.picks.firstOrNull { it.champion == null }
 
         if (targetPick != null) {
             GameState.targetPickPosition = PickPosition(targetPick.team, targetPick.position ?: 0)
             GameState.startGameWithDraft(draftData, GameState.targetPickPosition!!, requireContext())
-            draftInfoText.text = "Game started! ($source)"
             gameplayListener?.onGameStarted()
-
-            // Логирование целевого пика
-            println("🎯 TARGET PICK: Team ${targetPick.team}, Position ${targetPick.position}")
-        } else {
-            draftInfoText.text = "No empty picks found"
-            println("⚠️ No empty picks found in draft")
         }
     }
 

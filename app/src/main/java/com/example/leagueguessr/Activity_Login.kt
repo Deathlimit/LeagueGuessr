@@ -25,7 +25,6 @@ class Activity_Login : AppCompatActivity() {
         dbHelper = UserDbHelper(this)
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
 
-        // Проверяем, авторизован ли пользователь
         if (isUserLoggedIn()) {
             startMainActivity()
             return

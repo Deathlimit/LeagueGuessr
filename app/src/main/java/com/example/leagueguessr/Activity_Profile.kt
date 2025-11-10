@@ -30,6 +30,8 @@ class Activity_Profile : AppCompatActivity() {
     private lateinit var btnLogout: Button
     private lateinit var avatarImageView: ImageView
     private lateinit var btnChangeAvatar: Button
+    private lateinit var btnChangeLangRu : Button
+    private lateinit var btnChangeLangEn : Button
     private lateinit var dbHelper: UserDbHelper
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -60,8 +62,8 @@ class Activity_Profile : AppCompatActivity() {
             loadUserDescription()
             loadAvatar()
             setupAvatarButton()
-            checkDatabaseHealth()
             setupDescriptionButton()
+            setupLanguage()
     }
 
     private fun initViews() {
@@ -72,6 +74,8 @@ class Activity_Profile : AppCompatActivity() {
         descriptionTextView = findViewById(R.id.descriptionText)
         btnEditDescription = findViewById(R.id.btnEditDescription)
         btnChangeAvatar = findViewById(R.id.btnChangeAvatar)
+        btnChangeLangRu = findViewById(R.id.button_russian)
+        btnChangeLangEn = findViewById(R.id.button_english)
     }
 
     private fun loadAvatar() {
@@ -116,7 +120,6 @@ class Activity_Profile : AppCompatActivity() {
                 val originalBitmap = BitmapFactory.decodeStream(inputStream)
                 inputStream?.close()
 
-                // Сжимаем изображение
                 val compressedBitmap = compressBitmap(originalBitmap, 400, 400)
 
                 val userId = sharedPreferences.getInt("user_id", -1)
@@ -125,8 +128,6 @@ class Activity_Profile : AppCompatActivity() {
                     if (success) {
                         avatarImageView.setImageBitmap(compressedBitmap)
                         Toast.makeText(this, "Аватар обновлен", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Ошибка обновления аватара", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
@@ -185,7 +186,7 @@ class Activity_Profile : AppCompatActivity() {
 
     private fun setupUserInfo() {
         val username = sharedPreferences.getString("username", "")
-        usernameTextView.text = "   $username"
+        usernameTextView.text = "$username"
     }
 
     private fun loadUserDescription() {
@@ -211,7 +212,7 @@ class Activity_Profile : AppCompatActivity() {
         editText.hint = "Введите описание профиля"
 
         AlertDialog.Builder(this)
-            .setTitle("Редактировать описание")
+            .setTitle("")
             .setView(editText)
             .setPositiveButton("Сохранить") { dialog, _ ->
                 val newDescription = editText.text.toString().trim()
@@ -246,6 +247,26 @@ class Activity_Profile : AppCompatActivity() {
         }
     }
 
+    private fun setupLanguage(){
+        btnChangeLangRu.setOnClickListener {
+            onLanguageChanged("ru")
+        }
+
+        btnChangeLangEn.setOnClickListener {
+            onLanguageChanged("en")
+        }
+    }
+
+    private fun onLanguageChanged(languageCode: String) {
+        changeLanguage(languageCode)
+    }
+
+    private fun changeLanguage(languageCode: String) {
+        val prefs = getSharedPreferences("AppSettings", MODE_PRIVATE)
+        prefs.edit().putString("language", languageCode).apply()
+        recreate()
+    }
+
     private fun updateRank() {
         val userId = sharedPreferences.getInt("user_id", -1)
         if (userId != -1) {
@@ -277,6 +298,8 @@ class Activity_Profile : AppCompatActivity() {
 
 
 
+
+
     private fun setupNavigation() {
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigation.selectedItemId = R.id.navigation_profile
@@ -301,20 +324,6 @@ class Activity_Profile : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
-    }
-    private fun checkDatabaseHealth() {
-        try {
-            val userId = sharedPreferences.getInt("user_id", -1)
-            if (userId != -1) {
-                val history = dbHelper.getUserGameHistory(userId)
-                Toast.makeText(this, "\"Database health check: User history count = ${history.size}\"", Toast.LENGTH_LONG).show()
-
-                val avatar = dbHelper.getUserAvatar(userId)
-                Toast.makeText(this, "Database health check: Avatar exists = ${avatar != null}", Toast.LENGTH_LONG).show()
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Database health check failed: ${e.message}")
         }
     }
 

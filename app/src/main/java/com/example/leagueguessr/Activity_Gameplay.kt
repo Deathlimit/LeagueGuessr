@@ -23,7 +23,7 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
             return
         }
 
-        setContentView(R.layout.activity_fragments_gameplay)
+        setContentView(R.layout.activity_gameplay)
 
         GameState.initialize(this)
 
@@ -56,15 +56,6 @@ class Activity_Gameplay : AppCompatActivity(), Fragment_Gameplay.GameplayListene
         // TDO: Логика при окончании игры
     }
 
-    override fun onLanguageChanged(languageCode: String) {
-        changeLanguage(languageCode)
-    }
-
-    private fun changeLanguage(languageCode: String) {
-        val prefs = getSharedPreferences("AppSettings", MODE_PRIVATE)
-        prefs.edit().putString("language", languageCode).apply()
-        recreate()
-    }
 
     private fun setAppLanguage() {
         val prefs = getSharedPreferences("AppSettings", MODE_PRIVATE)

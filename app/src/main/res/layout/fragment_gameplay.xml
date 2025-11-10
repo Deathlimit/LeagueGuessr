@@ -9,16 +9,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_weight="3"
         android:orientation="horizontal">
 
-        <!-- Левая колонка с банами -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -27,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_weight="0.01"
                 android:gravity="center"
                 android:text="@string/bans"
                 android:textSize="24sp"
@@ -36,9 +36,9 @@
                 android:id="@+id/BanLeft1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
@@ -47,9 +47,9 @@
                 android:id="@+id/BanLeft2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -57,9 +57,9 @@
                 android:id="@+id/BanLeft3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -67,9 +67,9 @@
                 android:id="@+id/BanLeft4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -77,31 +77,27 @@
                 android:id="@+id/BanLeft5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
 
-        <!-- Левая колонка с пиками -->
-
-        <!-- Правая колонка с пиками -->
         <LinearLayout
             android:id="@+id/PicksLeft"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
             android:gravity="center"
-            android:minHeight="200px"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textViewPicksLeft"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_weight="0.1"
+                android:layout_weight="0.01"
                 android:gravity="center"
                 android:text="@string/picks"
                 android:textSize="24sp"
@@ -110,50 +106,50 @@
             <ImageView
                 android:id="@+id/PickLeft1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickLeft2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickLeft3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickLeft4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickLeft5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
@@ -161,18 +157,17 @@
         <LinearLayout
             android:id="@+id/PicksRight"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
             android:gravity="center"
-            android:minHeight="200px"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textViewPicksRight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_weight="0.1"
+                android:layout_weight="0.01"
                 android:gravity="center"
                 android:text="@string/picks"
                 android:textSize="24sp"
@@ -181,59 +176,58 @@
             <ImageView
                 android:id="@+id/PickRight1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickRight2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickRight3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickRight4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
             <ImageView
                 android:id="@+id/PickRight5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50px"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:minHeight="200px"
+                android:minHeight="150dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
 
-        <!-- Правая колонка с банами -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -242,6 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_weight="0.05"
                 android:gravity="center"
                 android:text="@string/bans"
                 android:textSize="24sp"
@@ -251,9 +246,9 @@
                 android:id="@+id/BanRight1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -261,9 +256,9 @@
                 android:id="@+id/BanRight2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -271,9 +266,9 @@
                 android:id="@+id/BanRight3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -281,9 +276,9 @@
                 android:id="@+id/BanRight4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
 
@@ -291,79 +286,50 @@
                 android:id="@+id/BanRight5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30px"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:minHeight="150px"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/_unknown_pick_ban"
                 tools:srcCompat="@drawable/_unknown_pick_ban" />
         </LinearLayout>
+
     </LinearLayout>
 
-    <!-- Кнопка Start -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
         android:layout_weight="8"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/startButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="200px"
-            android:layout_marginRight="200px"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:text="Start" />
-    </LinearLayout>
 
-    <!-- Кнопки смены языка -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
-
-        <Button
-            android:id="@+id/button_russian"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/draftInfoText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RU"
-            android:backgroundTint="@color/button_background"
-            android:textColor="@color/button_text"
-            android:layout_margin="8dp" />
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/button_english"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="EN"
-            android:backgroundTint="@color/button_background"
-            android:textColor="@color/button_text"
-            android:layout_margin="8dp" />
-
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:text=""
+            android:textColor="#FF5722"
+            android:visibility="visible" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/draftInfoText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="No draft loaded"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/loadingText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:visibility="gone"
-        android:gravity="center"
-        android:textColor="#FF5722"
-        android:layout_marginBottom="8dp" />
 
 </LinearLayout>

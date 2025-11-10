@@ -27,7 +27,7 @@ class Activity_Champions : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fragments_champions)
+        setContentView(R.layout.activity_champions)
 
         setupNavigation()
         setupFragments()
@@ -35,7 +35,7 @@ class Activity_Champions : AppCompatActivity() {
 
     private fun setupFragments() {
         roleTitles.keys.forEach { role ->
-            val fragment = Fragment_ChampionList.newInstance(role) { champion ->
+            val fragment = Fragment_Champions.newInstance(role) { champion ->
                 onChampionSelected(champion)
             }
 

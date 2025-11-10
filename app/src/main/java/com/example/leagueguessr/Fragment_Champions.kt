@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class Fragment_ChampionList : Fragment() {
+class Fragment_Champions : Fragment() {
 
     private lateinit var adapter: Adapter_Champions
     private var role: String = ""
@@ -17,8 +17,8 @@ class Fragment_ChampionList : Fragment() {
     companion object {
         private const val ARG_ROLE = "role"
 
-        fun newInstance(role: String, onChampionSelected: (Data_champion) -> Unit): Fragment_ChampionList {
-            val fragment = Fragment_ChampionList()
+        fun newInstance(role: String, onChampionSelected: (Data_champion) -> Unit): Fragment_Champions {
+            val fragment = Fragment_Champions()
             val args = Bundle()
             args.putString(ARG_ROLE, role)
             fragment.arguments = args
@@ -33,7 +33,7 @@ class Fragment_ChampionList : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_champion_list, container, false)
+        return inflater.inflate(R.layout.fragment_champions, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
